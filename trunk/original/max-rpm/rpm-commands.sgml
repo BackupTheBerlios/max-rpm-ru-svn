@@ -1,0 +1,1026 @@
+  <appendix id="ch-rpm-commands">
+    <title>Concise RPM Command Reference</title>
+
+    <indexterm>
+      <primary>RPM</primary>
+      <secondary>command reference</secondary>
+    </indexterm>
+
+    <sect1 id="s1-rpm-commands-global-options">
+      <title>Global Options</title>
+      <indexterm>
+        <primary>RPM</primary>
+        <secondary>command reference</secondary>
+        <tertiary>global options</tertiary>
+      </indexterm>
+
+      <para>
+        The following options can be used in any of RPM's modes:
+
+        <itemizedlist mark="bullet">
+          <listitem>
+            <para>
+              <command>--quiet</command> &mdash; Print as little output as
+              possible.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>-v</command> &mdash; Be a little more verbose.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>-vv</command> &mdash; Be incredibly verbose (for
+              debugging).
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--root <replaceable>&lt;dir&gt;</replaceable></command>
+              &mdash; Use
+              <command><replaceable>&lt;dir&gt;</replaceable></command> as the
+              top level directory.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--dbpath <replaceable>&lt;dir&gt;</replaceable></command>
+              &mdash; Use
+              <command><replaceable>&lt;dir&gt;</replaceable></command> as the
+              directory for the database.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--rcfile
+              <replaceable>&lt;file&gt;</replaceable></command> &mdash; Use
+              <command><replaceable>&lt;file&gt;</replaceable></command> instead
+              of <filename>/etc/rpmrc</filename> and
+              <filename>$HOME/.rpmrc</filename>.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+    </sect1>
+
+    <sect1 id="s1-rpm-commands-information-options">
+      <title>Informational Options</title>
+      <indexterm>
+        <primary>RPM</primary>
+        <secondary>command reference</secondary>
+        <tertiary>informational options</tertiary>
+      </indexterm>
+
+      <para>
+        The following options are used to display information about RPM:
+      </para>
+      <para>
+        Format: <command>rpm <replaceable>&lt;option&gt;</replaceable></command>
+
+        <itemizedlist mark="bullet">
+          <listitem>
+            <para>
+              <command>--version</command> &mdash; Print the version of rpm
+              being used.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--help</command> &mdash; Print a help message.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--showrc</command> &mdash; Show rcfile information.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--querytags</command> &mdash; List the tags that can be
+              used with <command>--queryformat</command>.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+    </sect1>
+
+    <sect1 id="s1-rpm-commands-query-mode">
+      <title>Query Mode</title>
+      <indexterm>
+        <primary>RPM</primary>
+        <secondary>command reference</secondary>
+        <tertiary>query mode</tertiary>
+      </indexterm>
+
+      <para>
+        RPM's query mode is used to display information about packages:
+      </para>
+      <para>
+        Format: <command>rpm --query
+        <replaceable>&lt;options&gt;</replaceable></command>
+      </para>
+      <para>
+        or
+      </para>
+      <para>
+        Format: <command>rpm -q
+        <replaceable>&lt;options&gt;</replaceable></command>
+      </para>
+
+      <sect2 id="s2-rpm-commands-package-specification">
+        <title>Package Specification Options To Query Mode</title>
+
+        <para>
+          No more than one of the following options may be present in every
+          query command.  They are used to select the source of the information
+          to be displayed.
+
+          <itemizedlist mark="bullet">
+            <listitem>
+              <para>
+                <command><replaceable>&lt;packagename&gt;</replaceable></command>
+                &mdash; Query the named package.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>-a</command> &mdash; Query all packages.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>-f <replaceable>&lt;file&gt;</replaceable>+</command>
+                &mdash; Query package owning
+                <command><replaceable>&lt;file&gt;</replaceable></command>.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>-g <replaceable>&lt;group&gt;</replaceable>+</command>
+                &mdash; Query packages with group
+                <command><replaceable>&lt;group&gt;</replaceable></command>.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>-p
+                <replaceable>&lt;packagefile&gt;</replaceable>+</command>
+                &mdash; Query (uninstalled) package
+                <command><replaceable>&lt;packagefile&gt;</replaceable></command>.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>--whatprovides
+                <replaceable>&lt;i&gt;</replaceable></command> &mdash; Query
+                packages that provide
+                <command><replaceable>&lt;i&gt;</replaceable></command>
+                capability.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>--whatrequires
+                <replaceable>&lt;i&gt;</replaceable></command> &mdash; Query
+                packages that require
+                <command><replaceable>&lt;i&gt;</replaceable></command>
+                capability.
+              </para>
+            </listitem>
+          </itemizedlist>
+        </para>
+      </sect2>
+
+      <sect2 id="s2-rpm-commands-information-selection">
+        <title>Information Selection Options To Query Mode</title>
+
+        <para>
+          One or more of the following options may be added to any query
+          command.  They are used to select what information RPM will display.
+          If no information selection option is present on the command line, RPM
+          will simply display the applicable package label(s):
+
+          <itemizedlist mark="bullet">
+            <listitem>
+              <para>
+                <command>-i</command> &mdash; Display package information.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>-l</command> &mdash; Display package file list.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>-s</command> &mdash; Show file states (implies
+                <command>-l</command>).
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>-d</command> &mdash; List only documentation files
+                (implies <command>-l</command>).
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>-c</command> &mdash; List only configuration files
+                (implies <command>-l</command>).
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>--dump</command> &mdash; Show all available information
+                for each file (must be used with <command>-l</command>,
+                <command>-c</command>, or <command>-d</command>).
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>--provides</command> &mdash; List capabilities that the
+                package provides.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>--requires</command>, <command>-R</command> &mdash;
+                List capabilities that the package requires.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>--scripts</command> &mdash; Print the various
+                [un]install, verification scripts.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>--queryformat
+                <replaceable>&lt;s&gt;</replaceable></command> &mdash; Use
+                <command><replaceable>&lt;s&gt;</replaceable></command> as the
+                header format (implies <command>-i</command>).
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>--qf <replaceable>&lt;s&gt;</replaceable></command>
+                &mdash; Shorthand for <command>--queryformat</command>.
+              </para>
+            </listitem>
+          </itemizedlist>
+        </para>
+      </sect2>
+    </sect1>
+
+    <sect1 id="s1-rpm-commands-verify-mode">
+      <title>Verify Mode</title>
+      <indexterm>
+        <primary>RPM</primary>
+        <secondary>command reference</secondary>
+        <tertiary>verify mode</tertiary>
+      </indexterm>
+
+      <para>
+        RPM's verification mode is used to ensure that a package is still
+        installed properly:
+      </para>
+      <para>
+        Format: <command>rpm --verify
+        <replaceable>&lt;options&gt;</replaceable></command>
+      </para>
+      <para>
+        or
+      </para>
+      <para>
+        Format: <command>rpm -V
+        <replaceable>&lt;options&gt;</replaceable></command>
+      </para>
+      <para>
+        or
+      </para>
+      <para>
+        Format: <command>rpm -y
+        <replaceable>&lt;options&gt;</replaceable></command>
+      </para>
+
+      <sect2 id="s2-rpm-commands-verify-options">
+        <title>Options To Verify Mode</title>
+
+        <para>
+          The following options can be used on any verify command:
+
+          <itemizedlist mark="bullet">
+            <listitem>
+              <para>
+                <command>--nodeps</command> &mdash; Do not verify package
+                dependencies.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>--nofiles</command> &mdash; Do not verify file
+                attributes.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>--noscripts</command> &mdash; Do not execute the
+                package's verification script.
+              </para>
+            </listitem>
+          </itemizedlist>
+        </para>
+      </sect2>
+    </sect1>
+
+    <sect1 id="s1-rpm-commands-install-mode">
+      <title>Install Mode</title>
+      <indexterm>
+        <primary>RPM</primary>
+        <secondary>command reference</secondary>
+        <tertiary>install mode</tertiary>
+      </indexterm>
+
+      <para>
+        RPM's installation mode is used to install packages:
+      </para>
+      <para>
+        Format: <command>rpm --install
+        <replaceable>&lt;packagefile&gt;</replaceable></command>
+      </para>
+      <para>
+        or
+      </para>
+      <para>
+        Format: <command>rpm -i
+        <replaceable>&lt;packagefile&gt;</replaceable></command>
+      </para>
+
+      <sect2 id="s2-rpm-commands-install-options">
+        <title>Options To Install Mode</title>
+
+        <para>
+          The following options can be used on any install command:
+
+          <itemizedlist mark="bullet">
+            <listitem>
+              <para>
+                <command>-h</command>, <command>--hash</command> &mdash; Print
+                hash marks as package installs (good with
+                <command>-v</command>).
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>--prefix
+                <replaceable>&lt;dir&gt;</replaceable></command> &mdash;
+                Relocate the package to
+                <command><replaceable>&lt;dir&gt;</replaceable></command>, if
+                relocatable.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>--excludedocs</command> &mdash; Do not install
+                documentation.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>--force</command> &mdash; Shorthand for
+                <command>--replacepkgs</command> and <command>
+                --replacefiles</command>.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>--ignorearch</command> &mdash; Do not verify package
+                architecture.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>--ignoreos</command> &mdash; Do not verify package
+                operating system.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>--includedocs</command> &mdash; Install documentation.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>--nodeps</command> &mdash; Do not check package
+                dependencies.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>--noscripts</command> &mdash; Do not execute any
+                installation scripts.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>--percent</command> &mdash; Print percentages as
+                package installs.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>--replacefiles</command> &mdash; Install even if the
+                package replaces installed files.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>--replacepkgs</command> &mdash; Reinstall if the
+                package is already present.
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>--test</command> &mdash; Do not install, but tell if it
+                would work or not.
+              </para>
+            </listitem>
+          </itemizedlist>
+        </para>
+      </sect2>
+    </sect1>
+
+  <sect1 id="s1-rpm-commands-upgrade-mode">
+    <title>Upgrade Mode</title>
+    <indexterm>
+      <primary>RPM</primary>
+      <secondary>command reference</secondary>
+      <tertiary>upgrade mode</tertiary>
+    </indexterm>
+
+    <para>
+      RPM's upgrade mode is used to upgrade packages:
+    </para>
+    <para>
+      Format: <command>rpm --upgrade
+      <replaceable>&lt;packagefile&gt;</replaceable></command>
+    </para>
+    <para>
+      or
+    </para>
+    <para>
+      Format: <command>rpm -U
+      <replaceable>&lt;packagefile&gt;</replaceable></command>
+    </para>
+
+    <sect2 id="s2-rpm-commands-upgrade-options">
+      <title>Options To Upgrade Mode</title>
+
+      <para>
+        The following options can be used on any upgrade command:
+
+        <itemizedlist mark="bullet">
+          <listitem>
+            <para>
+              <command>-h</command>, <command>--hash</command> &mdash; Print
+              hash marks as package installs (good with <command>-v</command>).
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--prefix <replaceable>&lt;dir&gt;</replaceable></command>
+              &mdash; Relocate the package to
+              <command><replaceable>&lt;dir&gt;</replaceable></command>, if
+              relocatable.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--excludedocs</command> &mdash; Do not install
+              documentation.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--force</command> &mdash; Shorthand for
+              <command>--replacepkgs</command>,
+              <command>--replacefiles</command>, and
+              <command>--oldpackage</command>.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--ignorearch</command> &mdash; Do not verify package
+              architecture.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--ignoreos</command> &mdash; Do not verify package
+              operating system.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--includedocs</command> &mdash; Install documentation.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--nodeps</command> &mdash; Do not verify package
+              dependencies.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--noscripts</command> &mdash; Do not execute any
+              installation scripts.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--percent</command> &mdash; Print percentages as package
+              installs.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--replacefiles</command> &mdash; Install even if the
+              package replaces installed files.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--replacepkgs</command> &mdash; Reinstall if the package
+              is already present.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--test</command> &mdash; Do not install, but tell if it
+              would work or not.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--oldpackage</command> &mdash; Upgrade to an old version
+              of the package (<command>--force</command> on upgrades does this
+              automatically).
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="s1-rpm-commands-erase-mode">
+    <title>Erase Mode</title>
+    <indexterm>
+      <primary>RPM</primary>
+      <secondary>command reference</secondary>
+      <tertiary>erase mode</tertiary>
+    </indexterm>
+
+    <para>
+      RPM's erase mode is used to erase previously installed packages:
+    </para>
+    <para>
+      Format: <command>rpm --erase
+      <replaceable>&lt;package&gt;</replaceable></command>
+    </para>
+    <para>
+      or
+    </para>
+    <para>
+      Format: <command>rpm -e
+      <replaceable>&lt;package&gt;</replaceable></command>
+    </para>
+
+    <sect2 id="s2-rpm-commands-erase-options">
+      <title>Options To Erase Mode</title>
+
+      <para>
+        The following options can be used on any erase command:
+
+        <itemizedlist mark="bullet">
+          <listitem>
+            <para>
+              <command>--nodeps</command> &mdash; Do not verify package
+              dependencies.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--noscripts</command> &mdash; Do not execute any
+              installation scripts.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="s1-rpm-commands-build-mode">
+    <title>Build Mode</title>
+    <indexterm>
+      <primary>RPM</primary>
+      <secondary>command reference</secondary>
+      <tertiary>build mode</tertiary>
+    </indexterm>
+
+    <para>
+      RPM's build mode is used to build packages:
+    </para>
+    <para>
+      Format: &rpmb; <command>-b<replaceable>&lt;stage&gt;</replaceable>
+      <replaceable>&lt;options&gt;</replaceable>
+      <replaceable>&lt;specfile&gt;</replaceable></command>
+    </para>
+    <para>
+      (Note that <command>-vv</command> is the default for all build mode
+      commands.)
+    </para>
+
+    <sect2 id="s2-rpm-commands-build-mode-stages">
+      <title>Build Mode Stages</title>
+
+      <para>
+        One of the following stages must follow the <command>-b</command>
+        option:
+
+        <itemizedlist mark="bullet">
+          <listitem>
+            <para>
+              <command>p</command> &mdash; Prep (unpack sources and apply
+              patches).
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>l</command> &mdash; List check (do some cursory checks on
+              <command>%files</command>).
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>c</command> &mdash; Compile (prep and compile).
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>i</command> &mdash; Install (prep, compile, install).
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>b</command> &mdash; Binary package (prep, compile,
+              install, package).
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>a</command> &mdash; Binary/source package (prep, compile,
+              install, package).
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+    </sect2>
+
+    <sect2 id="s2-rpm-commands-build-options">
+      <title>Options To Build Mode</title>
+
+      <para>
+        The following options can be used on any build command:
+
+        <itemizedlist mark="bullet">
+          <listitem>
+            <para>
+              <command>--short-circuit</command> &mdash; Skip straight to
+              specified stage (only for <command>c</command> and
+              <command>i</command>).
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--clean</command> &mdash; Remove build tree when done.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--sign</command> &mdash; Generate PGP signature.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--buildroot
+              <replaceable>&lt;s&gt;</replaceable></command> &mdash; Use
+              <command><replaceable>&lt;s&gt;</replaceable></command> as the
+              build root.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--buildarch
+              <replaceable>&lt;s&gt;</replaceable></command> &mdash; Use
+              <command><replaceable>&lt;s&gt;</replaceable></command> as the
+              build architecture.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--buildos <replaceable>&lt;s&gt;</replaceable></command>
+              &mdash; Use
+              <command><replaceable>&lt;s&gt;</replaceable></command> as the
+              build operating system.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--test</command> &mdash; Do not execute any stages.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <command>--timecheck
+              <replaceable>&lt;s&gt;</replaceable></command> &mdash; Set the
+              time check to
+              <command><replaceable>&lt;s&gt;</replaceable></command> seconds (0
+              disables it).
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="s1-rpm-commands-rebuild-mode">
+    <title>Rebuild Mode</title>
+    <indexterm>
+      <primary>RPM</primary>
+      <secondary>command reference</secondary>
+      <tertiary>rebuild mode</tertiary>
+    </indexterm>
+
+    <para>
+      RPM's rebuild mode is used to rebuild packages from a source package file.
+      The source archives, patches, and icons that comprise the source package
+      are removed after the binary package is built.  Rebuild mode implies
+      <command>--clean</command>.
+    </para>
+    <para>
+      Format: <command>rpm --rebuild <replaceable>&lt;options&gt;</replaceable>
+      <replaceable>&lt;source-package&gt;</replaceable></command>
+    </para>
+    <para>
+      (Note that <command>-vv</command> is the default for all rebuild mode
+      commands.)
+    </para>
+
+    <sect2 id="s2-rpm-commands-rebuild-options">
+      <title>Options To Rebuild Mode</title>
+
+      <para>
+        Only the global options may be used.
+      </para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="s1-rpm-commands-recompile-mode">
+    <title>Recompile Mode</title>
+    <indexterm>
+      <primary>RPM</primary>
+      <secondary>command reference</secondary>
+      <tertiary>recompile mode</tertiary>
+    </indexterm>
+
+    <para>
+      RPM's recompile mode is used to recompile software from a source package
+      file.  Unlike <command>--rebuild</command>, no binary package is created.
+    </para>
+    <para>
+      Format: <command>rpm --recompile
+      <replaceable>&lt;options&gt;</replaceable>
+      <replaceable>&lt;source-package&gt;</replaceable></command>
+    </para>
+    <para>
+      (Note that <command>-vv</command> is the default for all recompile mode
+      commands.)
+    </para>
+
+    <sect2 id="s2-rpm-commands-recompile-options">
+      <title>Options To Recompile Mode</title>
+
+      <para>
+        Only the global options may be used.
+      </para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="s1-rpm-commands-resign-mode">
+    <title>Resign Mode</title>
+    <indexterm>
+      <primary>RPM</primary>
+      <secondary>command reference</secondary>
+      <tertiary>resign mode</tertiary>
+    </indexterm>
+
+    <para>
+      RPM's resign mode is used to replace a package's signature with a new one:
+    </para>
+    <para>
+      Format: <command>rpm --resign <replaceable>&lt;options&gt;</replaceable>
+      <replaceable>&lt;packagefile&gt;</replaceable>+</command>
+    </para>
+
+    <sect2 id="s2-rpm-commands-resign-options">
+      <title>Options To Resign Mode</title>
+
+      <para>
+        Only the global options may be used.
+      </para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="s1-rpm-commands-add-signature-mode">
+    <title>Add Signature Mode</title>
+    <indexterm>
+      <primary>RPM</primary>
+      <secondary>command reference</secondary>
+      <tertiary>add signature mode</tertiary>
+    </indexterm>
+
+    <para>
+      RPM's add signature mode is used to add a signature to a package:
+    </para>
+    <para>
+      Format: <command>rpm --addsign <replaceable>&lt;options&gt;</replaceable>
+      <replaceable>&lt;packagefile&gt;</replaceable>+</command>
+    </para>
+
+    <sect2 id="s2-rpm-commands-add-signature-options">
+      <title>Options To Add Signature Mode</title>
+
+      <para>
+        Only the global options may be used.
+      </para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="s1-rpm-commands-check-signature-mode">
+    <title>Check Signature Mode</title>
+    <indexterm>
+      <primary>RPM</primary>
+      <secondary>command reference</secondary>
+      <tertiary>check signature mode</tertiary>
+    </indexterm>
+
+    <para>
+      RPM's check signature mode is used to verify a package's signature:
+    </para>
+    <para>
+      Format: <command>rpm --checksig <replaceable>&lt;options&gt;</replaceable>
+      <replaceable>&lt;packagefile&gt;</replaceable>+</command>
+    </para>
+    <para>
+      or
+    </para>
+    <para>
+      Format: <command>rpm -K <replaceable>&lt;options&gt;</replaceable>
+      <replaceable>&lt;packagefile&gt;</replaceable>+</command>
+    </para>
+
+    <sect2 id="s2-rpm-commands-check-signature-options">
+      <title>Options To Check Signature Mode</title>
+
+      <para>
+        The following option can be used on any check signature command:
+
+        <itemizedlist mark="bullet">
+          <listitem>
+            <para>
+              <command>--nopgp</command> &mdash; Skip any PGP signatures (size
+              and MD5 only).
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="s1-rpm-commands-initialize-database-mode">
+    <title>Initialize Database Mode</title>
+    <indexterm>
+      <primary>RPM</primary>
+      <secondary>command reference</secondary>
+      <tertiary>initialize database mode</tertiary>
+    </indexterm>
+
+    <para>
+      RPM's initialize database mode is used to create a new RPM database:
+    </para>
+    <para>
+      Format: <command>rpm --initdb
+      <replaceable>&lt;options&gt;</replaceable></command>
+    </para>
+
+    <sect2 id="s2-rpm-commands-initialize-database-options">
+      <title>Options to Initialize database Mode</title>
+
+      <para>
+        Only the global options may be used.
+      </para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="s1-rpm-commands-rebuild-database-mode">
+    <title>Rebuild Database Mode</title>
+    <indexterm>
+      <primary>RPM</primary>
+      <secondary>command reference</secondary>
+      <tertiary>rebuild database mode</tertiary>
+    </indexterm>
+
+    <para>
+      RPM's rebuild database mode is used to rebuild an RPM database:
+    </para>
+    <para>
+      Format: <command>rpm --rebuilddb
+      <replaceable>&lt;options&gt;</replaceable></command>
+    </para>
+
+    <sect2 id="s2-rpm-commands-rebuild-database-options">
+      <title>Options to Rebuild Database Mode</title>
+
+      <para>
+        Only the global options may be used.
+      </para>
+    </sect2>
+  </sect1>
+</appendix>

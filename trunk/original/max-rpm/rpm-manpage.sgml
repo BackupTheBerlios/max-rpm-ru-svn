@@ -1,0 +1,1573 @@
+<RefEntry id="rpm.8">
+  <RefMeta>
+    <RefEntrytitle>rpm</RefEntrytitle>
+    <ManVolNum>8</ManVolNum>
+    <RefMiscInfo>&FORMAL-RHI;</RefMiscInfo>
+  </RefMeta>
+
+<RefNameDiv>
+  <RefName>&rpm;</RefName>
+  <RefPurpose>RPM Package Manager</RefPurpose>
+</RefNameDiv>
+
+<RefSynopsisDiv>
+  <refsect2>
+  <title>Querying and Verifying Packages:</title>
+  <para>
+    <simplelist>
+      <member>
+	<cmdsynopsis>
+	&rpm;
+	<arg choice="req"><option>-q|--query</option></arg>
+	<arg><synopfragmentref linkend="select-options">
+	    select-options
+	  </synopfragmentref></arg>
+	<arg><synopfragmentref linkend="query-options">
+	    query-options
+	  </synopfragmentref></arg>
+	</cmdsynopsis>
+      </member><member>
+	<cmdsynopsis>
+	&rpm;
+	<arg choice="req"><option>-V|--verify</option></arg>
+	<arg><synopfragmentref linkend="select-options">
+	    select-options
+	  </synopfragmentref></arg>
+	<arg><synopfragmentref linkend="verify-options">
+	    verify-options
+	  </synopfragmentref></arg>
+	</cmdsynopsis>
+      </member><member>
+	<cmdsynopsis>
+	&rpm;
+	<arg choice="req"><option>--import</option></arg>
+	<arg rep="repeat" choice="plain"><replaceable>PUBKEY</replaceable></arg>
+	</cmdsynopsis>
+      </member><member>
+	<cmdsynopsis>
+	&rpm;
+	<arg choice="req"><option>-K|--checksig</option></arg>
+	<arg><option>--nogpg</option></arg>
+	<arg><option>--nopgp</option></arg>
+	<arg><option>--nomd5</option></arg>
+	<arg rep="repeat" choice="plain"><replaceable>PACKAGE_FILE</replaceable></arg>
+	</cmdsynopsis>
+      </member>
+    </simplelist>
+  </para>
+  </refsect2><refsect2>
+  <title>Installing, Upgrading, and Removing Packages:</title>
+  <para>
+    <simplelist>
+      <member>
+	<cmdsynopsis>
+	&rpm;
+	<arg choice="req"><option>-i|--install</option></arg>
+	<arg><synopfragmentref linkend="install-options">
+	    install-options
+	  </synopfragmentref></arg>
+	<arg rep="repeat" choice="plain"><replaceable>PACKAGE_FILE</replaceable></arg>
+	</cmdsynopsis>
+      </member><member>
+	<cmdsynopsis>
+	&rpm;
+	<arg choice="req"><option>-U|--upgrade</option></arg>
+	<arg><synopfragmentref linkend="install-options">
+	    install-options
+	  </synopfragmentref></arg>
+	<arg rep="repeat" choice="plain"><replaceable>PACKAGE_FILE</replaceable></arg>
+	</cmdsynopsis>
+      </member><member>
+	<cmdsynopsis>
+	&rpm;
+	<arg choice="req"><option>-F|--freshen</option></arg>
+	<arg><synopfragmentref linkend="install-options">
+	    install-options
+	  </synopfragmentref></arg>
+	<arg rep="repeat" choice="plain"><replaceable>PACKAGE_FILE</replaceable></arg>
+	</cmdsynopsis>
+      </member><member>
+	<cmdsynopsis>
+	&rpm;
+	<arg choice="req"><option>-e|--erase</option></arg>
+	<arg><option>--allmatches</option></arg>
+	<arg><option>--nodeps</option></arg>
+	<arg><option>--noscripts</option></arg>
+	<arg><option>--notriggers</option></arg>
+	<sbr>
+	<arg><option>--repackage</option></arg>
+	<arg><option>--test</option></arg>
+	<arg rep="repeat" choice="plain"><replaceable>PACKAGE_NAME</replaceable></arg>
+	</cmdsynopsis>
+      </member>
+    </simplelist>
+  </para>
+  </refsect2><refsect2>
+  <title>Miscellaneous:</title>
+  <para>
+    <simplelist>
+      <member>
+	<cmdsynopsis>
+	&rpm;
+	<arg choice="req"><option>--initdb|--rebuilddb</option></arg>
+	</cmdsynopsis>
+      </member><member>
+	<cmdsynopsis>
+	&rpm;
+	<arg choice="req"><option>--addsign|--resign</option></arg>
+	<arg rep="repeat" choice="plain"><replaceable>PACKAGE_FILE</replaceable></arg>
+	</cmdsynopsis>
+      </member><member>
+	<cmdsynopsis>
+	&rpm;
+	<arg choice="req"><option>--querytags|--showrc</option></arg>
+	</cmdsynopsis>
+      </member><member>
+	<cmdsynopsis>
+	&rpm;
+	<arg choice="req"><option>--setperms|--setugids</option></arg>
+	<arg rep="repeat" choice="plain"><replaceable>PACKAGE_NAME</replaceable></arg>
+	</cmdsynopsis>
+      </member>
+    </simplelist>
+  </para>
+  </refsect2><refsect2>
+  <title>select-options</title>
+  <para>
+    <simplelist>
+      <member>
+	<cmdsynopsis>
+	<command></command>
+
+<!-- ================================ -->
+  <synopfragment id="select-options">
+  <group choice="plain">
+    <arg><option><replaceable>PACKAGE_NAME</replaceable></option></arg>
+    <arg><option>-a,--all</option></arg>
+	<sbr>
+    <arg><option>-f,--file</option> <replaceable>FILE</replaceable></arg>
+    <arg><option>-g,--group</option> <replaceable>GROUP</replaceable></arg>
+    <arg><option>-p,--package</option> <replaceable>PACKAGE_FILE</replaceable></arg>
+	<sbr>
+    <arg><option>--fileid</option> <replaceable>MD5</replaceable></arg>
+    <arg><option>--hdrid</option> <replaceable>SHA1</replaceable></arg>
+    <arg><option>--pkgid</option> <replaceable>MD5</replaceable></arg>
+	<sbr>
+
+    <arg><option>--querybynumber</option> <replaceable>HDRNUM</replaceable></arg>
+    <arg><option>--tid</option> <replaceable>TID</replaceable></arg>
+    <arg><option>--triggeredby</option> <replaceable>PACKAGE_NAME</replaceable></arg>
+	<sbr>
+    <arg><option>--whatprovides</option> <replaceable>CAPABILITY</replaceable></arg>
+    <arg><option>--whatrequires</option> <replaceable>CAPABILITY</replaceable></arg>
+  </group>
+  </synopfragment>
+<!-- ================================ -->
+
+	</cmdsynopsis>
+      </member>
+    </simplelist>
+  </para>
+  </refsect2><refsect2>
+  <title>query-options</title>
+  <para>
+    <simplelist>
+      <member>
+	<cmdsynopsis>
+	<command></command>
+
+<!-- ================================ -->
+  <synopfragment id="query-options">
+  <group choice="plain">
+    <arg><option>--changelog</option></arg>
+    <arg><option>-c,--configfiles</option></arg>
+    <arg><option>-d,--docfiles</option></arg>
+    <arg><option>--dump</option></arg>
+    <arg><option>--filesbypkg</option></arg>
+	<sbr>
+    <arg><option>-i,--info</option></arg>
+    <arg><option>--last</option></arg>
+    <arg><option>-l,--list</option></arg>
+    <arg><option>--provides</option></arg>
+    <arg><option>--qf,--queryformat</option> <replaceable>QUERYFMT</replaceable></arg>
+    <arg><option>-R,--requires</option></arg>
+	<sbr>
+    <arg><option>--scripts</option></arg>
+    <arg><option>-s,--state</option></arg>
+    <arg><option>--triggers,--triggerscripts</option></arg>
+  </group>
+  </synopfragment>
+<!-- ================================ -->
+
+	</cmdsynopsis>
+      </member>
+    </simplelist>
+  </para>
+  </refsect2><refsect2>
+  <title>verify-options</title>
+  <para>
+    <simplelist>
+      <member>
+	<cmdsynopsis>
+	<command></command>
+
+<!-- ================================ -->
+  <synopfragment id="verify-options">
+  <group choice="plain">
+    <arg><option>--nodeps</option></arg>
+    <arg><option>--nofiles</option></arg>
+    <arg><option>--noscripts</option></arg>
+	<sbr>
+    <arg><option>--nodigest</option></arg>
+    <arg><option>--nosignature</option></arg>
+	<sbr>
+    <arg><option>--nolinkto</option></arg>
+    <arg><option>--nomd5</option></arg>
+    <arg><option>--nosize</option></arg>
+    <arg><option>--nouser</option></arg>
+	<sbr>
+    <arg><option>--nogroup</option></arg>
+    <arg><option>--nomtime</option></arg>
+    <arg><option>--nomode</option></arg>
+    <arg><option>--nordev</option></arg>
+  </group>
+  </synopfragment>
+<!-- ================================ -->
+
+	</cmdsynopsis>
+      </member>
+    </simplelist>
+  </para>
+  </refsect2><refsect2>
+  <title>install-options</title>
+  <para>
+    <simplelist>
+      <member>
+	<cmdsynopsis>
+	<command></command>
+
+<!-- ================================ -->
+  <synopfragment id="install-options">
+  <group choice="plain">
+    <arg><option>--aid</option></arg>
+    <arg><option>--allfiles</option></arg>
+    <arg><option>--badreloc</option></arg>
+    <arg><option>--excludepath</option> <replaceable>OLDPATH</replaceable></arg>
+    <arg><option>--excludedocs</option></arg>
+    <arg><option>--force</option></arg>
+    <arg><option>-h,--hash</option></arg>
+	<sbr>
+    <arg><option>--ignoresize</option></arg>
+    <arg><option>--ignorearch</option></arg>
+    <arg><option>--ignoreos</option></arg>
+    <arg><option>--includedocs</option></arg>
+    <arg><option>--justdb</option></arg>
+	<sbr>
+    <arg><option>--nodigest</option></arg>
+    <arg><option>--nosignature</option></arg>
+    <arg><option>--nodeps</option></arg>
+    <arg><option>--nosuggest</option></arg>
+    <arg><option>--noorder</option></arg>
+	<sbr>
+    <arg><option>--noscripts</option></arg>
+    <arg><option>--notriggers</option></arg>
+	<sbr>
+    <arg><option>--oldpackage</option></arg>
+    <arg><option>--percent</option></arg>
+    <arg><option>--prefix</option> <replaceable>NEWPATH</replaceable></arg>
+    <arg><option>--relocate</option> <replaceable>OLDPATH</replaceable>=<replaceable>NEWPATH</replaceable></arg>
+	<sbr>
+    <arg><option>--repackage</option></arg>
+    <arg><option>--replacefiles</option></arg>
+    <arg><option>--replacepkgs</option></arg>
+    <arg><option>--test</option></arg>
+  </group>
+  </synopfragment>
+<!-- ================================ -->
+
+	</cmdsynopsis>
+      </member>
+    </simplelist>
+  </para>
+  </refsect2>
+</RefSynopsisDiv>
+
+<refsect1><title>Description</title>
+  <para>
+	&rpm; is a powerful <emphasis>Package Manager</emphasis>,
+	which can be used to build, install, query, verify, update, and
+	erase individual software packages.
+	A <emphasis>package</emphasis> consists of an archive of files and
+	meta-data used to install and erase the archive files. The meta-data
+	includes helper scripts, file attributes, and descriptive information
+	about the package.
+	<emphasis>Packages</emphasis> come in two varieties: binary packages,
+	used to encapsulate software to be installed, and source packages,
+	containing the source code and recipe necessary to produce binary
+	packages.
+  </para>
+
+  <para>
+    One of the following basic modes must be selected:
+	<emphasis>Query</emphasis>,
+	<emphasis>Verify</emphasis>,
+	<emphasis>Signature Check</emphasis>,
+	<emphasis>Install/Upgrade/Freshen</emphasis>,
+	<emphasis>Uninstall</emphasis>,
+	<emphasis>Recompile Package</emphasis>,
+	<emphasis>Initialize Database</emphasis>,
+	<emphasis>Rebuild Database</emphasis>,
+	<emphasis>Resign</emphasis>,
+	<emphasis>Add Signature</emphasis>,
+	<emphasis>Set Owners/Groups</emphasis>,
+	<emphasis>Show Querytags</emphasis>, and
+	<emphasis>Show Configuration</emphasis>.
+  </para>
+
+  <refsect2><title>General Options</title>
+  <para>
+  These options can be used in all the different modes.
+  </para>
+  <variablelist>
+    <varlistentry>
+    <term><option>-?, --help</option></term>
+      <listitem><para>
+	Print a longer usage message then normal.
+      </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--version</option></term>
+      <listitem><para>
+	Print a single line containing the version number of &rpm;
+	being used. </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--quiet</option></term>
+      <listitem><para>
+	Print as little as possible - normally only error messages will
+	be displayed.
+      </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>-v</option></term>
+      <listitem><para>
+	Print verbose information - normally routine progress messages will be
+	displayed.
+      </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>-vv</option></term>
+      <listitem><para>
+	Print lots of ugly debugging information.
+      </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--rcfile</option> <replaceable>FILELIST</replaceable></term>
+      <listitem><para>
+	Each of the files in the colon separated
+	<replaceable>FILELIST</replaceable>
+	is read sequentially by &rpm; for configuration
+	information.
+	Only the first file in the list must exist, and tildes will be
+	expanded to the value of <envar>$HOME</envar>.
+	The default <replaceable>FILELIST</replaceable> is
+		<filename>/usr/lib/rpm/rpmrc</filename>:<filename>/usr/lib/rpm/redhat/rpmrc</filename>:<filename>/etc/rpmrc</filename>:<filename>~/.rpmrc</filename>.
+      </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--pipe</option> <replaceable>CMD</replaceable></term>
+      <listitem><para>
+	Pipes the output of &rpm; to the command <replaceable>CMD</replaceable>.
+      </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--dbpath</option> <replaceable>DIRECTORY</replaceable></term>
+      <listitem><para>
+	Use the database in <replaceable>DIRECTORY</replaceable> rather
+	than the default path <filename>/var/lib/rpm</filename>
+      </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--root</option> <replaceable>DIRECTORY</replaceable></term>
+      <listitem><para>
+	Use the file system tree rooted at <replaceable>DIRECTORY</replaceable> for all operations.
+	Note that this means the database within
+		<replaceable>DIRECTORY</replaceable>
+	will be used for dependency checks and any scriptlet(s) (e.g.
+		<command>%post</command> if installing, or
+		<command>%prep</command> if building, a package)
+	will be run after a chroot(2) to
+		<replaceable>DIRECTORY</replaceable>.
+      </para></listitem>
+    </varlistentry>
+  </variablelist>
+  </refsect2>
+
+  <refsect2><title>Install and Upgrade Options</title>
+    <para>
+	The general form of an rpm install command is 
+    </para>
+
+    <para>
+      <cmdsynopsis>
+	&rpm;
+	<arg choice="req"><option>-i|--install</option></arg>
+	<arg><synopfragmentref linkend="install-options">
+	    install-options
+	  </synopfragmentref></arg>
+	<arg rep="repeat" choice="plain"><replaceable>PACKAGE_FILE</replaceable></arg>
+      </cmdsynopsis>
+    </para>
+
+    <para>
+	This installs a new package.
+    </para>
+    <para>
+	The general form of an rpm upgrade command is 
+    </para>
+
+    <para>
+      <cmdsynopsis>
+	&rpm;
+	<arg choice="req"><option>-U|--upgrade</option></arg>
+	<arg><synopfragmentref linkend="install-options">
+	    install-options
+	  </synopfragmentref></arg>
+	<arg rep="repeat" choice="plain"><replaceable>PACKAGE_FILE</replaceable></arg>
+      </cmdsynopsis>
+    </para>
+ 
+    <para>
+	This upgrades or installs the package currently installed
+	to a newer version.  This is the same as install, except
+	all other version(s) of the package are removed after the
+	new package is installed.
+    </para>
+
+    <para>
+      <cmdsynopsis>
+	&rpm;
+	<arg choice="req"><option>-F|--freshen</option></arg>
+	<arg><synopfragmentref linkend="install-options">
+	    install-options
+	  </synopfragmentref></arg>
+	<arg rep="repeat" choice="plain"><replaceable>PACKAGE_FILE</replaceable></arg>
+      </cmdsynopsis>
+    </para>
+
+    <para>
+	This will upgrade packages, but only if an earlier version
+	currently exists. The <replaceable>PACKAGE_FILE</replaceable>
+	may be specified as an
+		<command>ftp</command> or
+		<command>http</command> URL,
+	in which case the package will be downloaded before being
+	installed. See <command>FTP/HTTP OPTIONS</command>
+	for information on &rpm;'s internal
+		<command>ftp</command> and
+		<command>http</command>
+	client support. 
+    </para>
+
+    <para>
+    <variablelist>
+    <varlistentry>
+    <term><option>--aid</option></term>
+    <listitem><para>
+	Add suggested packages to the transaction set when needed.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--allfiles</option></term>
+    <listitem><para>
+	Installs or upgrades all the missingok files in the package,
+	regardless if they exist.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--badreloc</option></term>
+    <listitem><para>
+	Used with <option>--relocate</option>, permit relocations on
+	all file paths, not just those <replaceable>OLDPATH</replaceable>'s
+	included in the binary package relocation hint(s).
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--excludepath</option> <replaceable>OLDPATH</replaceable></term>
+    <listitem><para>
+	Don't install files whose name begins with
+	<replaceable>OLDPATH</replaceable>.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--excludedocs</option></term>
+    <listitem><para>
+	Don't install any files which are marked as documentation
+	(which includes man pages and texinfo documents).
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--force</option></term>
+    <listitem><para>
+	Same as using
+	<option>--replacepkgs</option>,
+	<option>--replacefiles</option>, and
+	<option>--oldpackage</option>.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>-h, --hash</option></term>
+    <listitem><para>
+	Print 50 hash marks as the package archive is unpacked.
+	Use with <option>-v|--verbose</option> for a nicer display.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--ignoresize</option></term>
+    <listitem><para>
+	Don't check mount file systems for sufficient disk space before
+	installing this package.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--ignorearch</option></term>
+    <listitem><para>
+	Allow installation or upgrading even if the architectures
+	of the binary package and host don't match.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--ignoreos</option></term>
+    <listitem><para>
+	Allow installation or upgrading even if the operating
+systems of the binary package and host don't match.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--includedocs</option></term>
+    <listitem><para>
+	Install documentation files. This is the default behavior.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--justdb</option></term>
+      <listitem><para>
+	Update only the database, not the filesystem.
+      </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--nodigest</option></term>
+    <listitem><para>
+	Don't verify package or header digests when reading.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--nosignature</option></term>
+    <listitem><para>
+	Don't verify package or header signatures when reading.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--nodeps</option></term>
+    <listitem><para>
+	Don't do a dependency check before installing or upgrading
+	a package.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--nosuggest</option></term>
+    <listitem><para>
+	Don't suggest package(s) that provide a missing dependency.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--noorder</option></term>
+    <listitem><para>
+	Don't reorder the packages for an install. The list of
+	packages would normally be reordered to satisfy dependencies.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--noscripts</option></term>
+    <term><option>--nopre</option></term>
+    <term><option>--nopost</option></term>
+    <term><option>--nopreun</option></term>
+    <term><option>--nopostun</option></term>
+    <listitem><para>
+	Don't execute the scriptlet of the same name.
+	The <option>--noscripts</option> option is equivalent to
+	</para><para>
+		<option>--nopre</option>
+		<option>--nopost</option>
+		<option>--nopreun</option>
+		<option>--nopostun</option>
+	</para><para>
+	and turns off the execution of the corresponding
+		<command>%pre</command>,
+		<command>%post</command>,
+		<command>%preun</command>, and
+		<command>%postun</command>
+	scriptlet(s).
+    </para></ListItem>
+    </varlistentry><varlistentry>
+    <term><option>--notriggers</option></term>
+    <term><option>--notriggerin</option></term>
+    <term><option>--notriggerun</option></term>
+    <term><option>--notriggerpostun</option></term>
+    <listitem><para>
+	Don't execute any trigger scriptlet of the named type.
+	The <option>--notriggers</option> option is equivalent to
+	</para><para>
+		<option>--notriggerin</option>
+		<option>--notriggerun</option>
+		<option>--notriggerpostun</option>
+	</para><para>
+	and turns off execution of the corresponding
+		<command>%triggerin</command>,
+		<command>%triggerun</command>, and
+		<command>%triggerpostun</command>
+	scriptlet(s).
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--oldpackage</option></term>
+    <listitem><para>
+	Allow an upgrade to replace a newer package with an older one.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--percent</option></term>
+    <listitem><para>
+	Print percentages as files are unpacked from the package archive.
+	This is intended to make &rpm; easy to run from
+	other tools.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--prefix</option> <replaceable>NEWPATH</replaceable></term>
+    <listitem><para>
+	For relocateable binary packages, translate all file paths that
+	start with the installation prefix in the package relocation hint(s)
+	to <replaceable>NEWPATH</replaceable>.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--relocate</option> <replaceable>OLDPATH</replaceable>=<replaceable>NEWPATH</replaceable></term>
+    <listitem><para>
+	For relocatable binary packages, translate all file paths
+	that start with <replaceable>OLDPATH</replaceable> in the
+	package relocation hint(s) to <replaceable>NEWPATH</replaceable>.
+	This option can be used repeatedly if several
+	<replaceable>OLDPATH</replaceable>'s in the package are to
+	be relocated.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--repackage</option></term>
+    <listitem><para>
+	Re-package the files before erasing. The previously installed
+	package will be named according to the macro
+		<command>%_repackage_name_fmt</command>
+	and will be created in the directory named by
+	the macro <command>%_repackage_dir</command> (default value
+	is <filename>/var/spool/repackage</filename>).
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--replacefiles</option></term>
+    <listitem><para>
+	Install the packages even if they replace files from other,
+	already installed, packages.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--replacepkgs</option></term>
+    <listitem><para>
+	Install the packages even if some of them are already installed
+	on this system.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--test</option></term>
+    <listitem><para>
+	Do not install the package, simply check for and report
+	potential conflicts.
+    </para></listitem>
+    </varlistentry>
+    </variablelist>
+    </para>
+  </refsect2>
+
+  <refsect2><title>Erase Options</title>
+    <para>
+	The general form of an rpm erase command is 
+    </para>
+
+    <para>
+      <cmdsynopsis>
+	&rpm;
+	<arg choice="req"><option>-e|--erase</option></arg>
+	<arg><option>--allmatches</option></arg>
+	<arg><option>--nodeps</option></arg>
+	<arg><option>--noscripts</option></arg>
+	<arg><option>--notriggers</option></arg>
+	<arg><option>--repackage</option></arg>
+	<arg><option>--test</option></arg>
+	<arg rep="repeat" choice="plain"><replaceable>PACKAGE_NAME</replaceable></arg>
+      </cmdsynopsis>
+    </para>
+
+    <para>
+	The following options may also be used:
+    </para>
+    <variablelist>
+    <varlistentry>
+    <term><option>--allmatches</option></term>
+    <listitem><para>
+	Remove all versions of the package which match
+	<replaceable>PACKAGE_NAME</replaceable>. Normally an
+	error is issued if <replaceable>PACKAGE_NAME</replaceable>
+	matches multiple packages.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--nodeps</option></term>
+    <listitem><para>
+	Don't check dependencies before uninstalling the packages.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--noscripts</option></term>
+    <term><option>--nopreun</option></term>
+    <term><option>--nopostun</option></term>
+    <listitem><para>
+	Don't execute the scriptlet of the same name.
+	The <option>--noscripts</option> option during package erase is
+	equivalent to
+	</para><para>
+		<option>--nopreun</option>
+		<option>--nopostun</option>
+	</para><para>
+	and turns off the execution of the corresponding
+		<command>%preun</command>, and
+		<command>%postun</command>
+	scriptlet(s).
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--notriggers</option></term>
+    <term><option>--notriggerun</option></term>
+    <term><option>--notriggerpostun</option></term>
+    <listitem><para>
+	Don't execute any trigger scriptlet of the named type.
+	The <option>--notriggers</option> option is equivalent to
+	</para><para>
+		<option>--notriggerun</option>
+		<option>--notriggerpostun</option>
+	</para><para>
+	and turns off execution of the corresponding
+		<command>%triggerun</command>, and
+		<command>%triggerpostun</command>
+	scriptlet(s).
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--repackage</option></term>
+    <listitem><para>
+	Re-package the files before erasing. The previously installed
+	package will be named according to the macro
+		<command>%_repackage_name_fmt</command>
+	and will be created in the directory named by
+	the macro <command>%_repackage_dir</command> (default value
+	is <filename>/var/spool/repackage</filename>).
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--test</option></term>
+    <listitem><para>
+	Don't really uninstall anything, just go through the motions.
+	Useful in conjunction with the <option>-vv</option> option
+	for debugging.
+    </para></listitem>
+    </varlistentry>
+    </variablelist>
+  </refsect2>
+
+  <refsect2><title>Query Options</title>
+    <para>
+	The general form of an rpm query command is 
+    </para>
+
+    <para>
+      <cmdsynopsis>
+	&rpm;
+	<arg choice="req"><option>-q|--query</option></arg
+	<arg><synopfragmentref linkend="select-options">
+	    select-options
+	  </synopfragmentref></arg>
+	<arg><synopfragmentref linkend="query-options">
+	    query-options
+	  </synopfragmentref></arg>
+      </cmdsynopsis>
+    </para>
+ 
+    <para>
+	You may specify the format that package information should be
+	printed in. To do this, you use the
+	<cmdsynopsis>
+	<arg choice="req"><option>--qf|--queryformat</option></arg>
+	<arg choice="plain"><replaceable>QUERYFMT</replaceable></arg>
+	</cmdsynopsis>
+	option, followed by the <replaceable>QUERYFMT</replaceable>
+	format string.  Query formats are modified versions of the
+	standard <command>printf(3)</command> formatting. The format
+	is made up of static strings (which may include standard C
+	character escapes for newlines, tabs, and other special
+	characters) and <command>printf(3)</command> type formatters.
+	As &rpm; already knows the type to print, the
+	type specifier must be omitted however, and replaced by the name
+	of the header tag to be printed, enclosed by <command>{}</command>
+	characters. Tag names are case insensitive, and the leading
+	<command>RPMTAG_</command> portion of the tag name may be omitted
+	as well.
+    </para><para>
+	Alternate output formats may be requested by following
+	the tag with <option>:<replaceable>typetag</replaceable></option>.
+	Currently, the following types are supported:
+    </para><para>
+	<variablelist>
+	    <varlistentry>
+		<term><command>:armor</command></term>
+		<listitem><para>
+		Wrap a public key in ASCII armor.
+		</para></listitem>
+	    </varlistentry><varlistentry>
+		<term><command>:base64</command></term>
+		<listitem><para>
+		Encode binary data using base64.
+		</para></listitem>
+	    </varlistentry><varlistentry>
+		<term><command>:date</command></term>
+		<listitem><para>
+		Use strftime(3) "%c" format.
+		</para></listitem>
+	    </varlistentry><varlistentry>
+		<term><command>:day</command></term>
+		<listitem><para>
+		Use strftime(3) "%a %b %d %Y" format.
+		</para></listitem>
+	    </varlistentry><varlistentry>
+		<term><command>:depflags</command></term>
+		<listitem><para>
+		Format dependency flags.
+		</para></listitem>
+	    </varlistentry><varlistentry>
+		<term><command>:fflags</command></term>
+		<listitem><para>
+		Format file flags.
+		</para></listitem>
+	    </varlistentry><varlistentry>
+		<term><command>:hex</command></term>
+		<listitem><para>
+		Format in hexadecimal.
+		</para></listitem>
+	    </varlistentry><varlistentry>
+		<term><command>:octal</command></term>
+		<listitem><para>
+		Format in octal.
+		</para></listitem>
+	    </varlistentry><varlistentry>
+		<term><command>:perms</command></term>
+		<listitem><para>
+		Format file permissions.
+		</para></listitem>
+	    </varlistentry><varlistentry>
+		<term><command>:shescape</command></term>
+		<listitem><para>
+		Escape single quotes for use in a script.
+		</para></listitem>
+	    </varlistentry><varlistentry>
+		<term><command>:triggertype</command></term>
+		<listitem><para>
+		Display trigger suffix.
+		</para></listitem>
+	    </varlistentry>
+	</variablelist>
+    </para><para>
+	For example, to print only the names of the packages queried,
+	you could use <command>%{NAME}</command> as the format string.
+	To print the packages name and distribution information in
+	two columns, you could use <command>%-30{NAME}%{DISTRIBUTION}</command>.
+	&rpm; will print a list of all of the tags it knows about when it
+	is invoked with the <option>--querytags</option> argument.
+    </para><para>
+	There are two subsets of options for querying: package selection,
+	and information selection.
+    </para>
+
+  </refsect2>
+  <refsect2><title>Package selection options:</title>
+    <para>
+
+    <variablelist>
+    <varlistentry>
+    <term><option><replaceable>PACKAGE_NAME</replaceable></option></term>
+    <listitem><para>
+	Query installed package named <replaceable>PACKAGE_NAME</replaceable>.
+    </para></ListItem>
+    </varlistentry><varlistentry>
+    <term><option>-a, --all</option></term>
+    <listitem><para>
+	Query all installed packages.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>-f, --file</option> <replaceable>FILE</replaceable></term>
+    <listitem><para>
+	Query package owning <replaceable>FILE</replaceable>.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--fileid</option> <replaceable>MD5</replaceable></term>
+    <listitem><para>
+	Query package that contains a given file identifier, i.e. the
+	<replaceable>MD5</replaceable> digest of the file contents.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>-g, --group</option> <replaceable>GROUP</replaceable></term>
+    <listitem><para>
+	Query packages with the group of <replaceable>GROUP</replaceable>.
+    </para></ListItem>
+    </varlistentry><varlistentry>
+    <term><option>--hdrid</option> <replaceable>SHA1</replaceable></term>
+    <listitem><para>
+	Query package that contains a given header identifier, i.e. the
+	<replaceable>SHA1</replaceable> digest of the immutable header region.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>-p, --package</option> <replaceable>PACKAGE_FILE</replaceable></term>
+    <listitem><para>
+	Query an (uninstalled) package <replaceable>PACKAGE_FILE</replaceable>.
+	The <replaceable>PACKAGE_FILE</replaceable> may be specified
+	as an <command>ftp</command> or <command>http</command> style URL, in
+	which case the package header will be downloaded and queried.
+	See <command>FTP/HTTP OPTIONS</command> for information on
+		&rpm;'s internal
+		<command>ftp</command> and
+		<command>http</command>
+	client support. The <replaceable>PACKAGE_FILE</replaceable> argument(s),
+	if not a binary package, will be interpreted as an ASCII package
+	manifest.  Comments are permitted, starting with a '#', and each
+	line of a package manifest file may include white space separated
+	glob expressions, including URL's with remote glob expressions,
+	that will be expanded to paths that are substituted in place of
+	the package manifest as additional <replaceable>PACKAGE_FILE</replaceable>
+	arguments to the query.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--pkgid</option> <replaceable>MD5</replaceable></term>
+    <listitem><para>
+	Query package that contains a given package identifier, i.e. the
+	<replaceable>MD5</replaceable> digest of the combined header and
+	payload contents.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--querybynumber</option> <replaceable>HDRNUM</replaceable></term>
+    <listitem><para>
+	Query the <replaceable>HDRNUM</replaceable>th database entry
+	directly; this is useful only for debugging.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--specfile</option> <replaceable>SPECFILE</replaceable></term>
+    <listitem><para>
+	Parse and query <replaceable>SPECFILE</replaceable> as if
+	it were a package. Although not all the information (e.g. file lists)
+	is available, this type of query permits rpm to be used to extract
+	information from spec files without having to write a specfile
+	parser.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--tid</option> <replaceable>TID</replaceable></term>
+    <listitem><para>
+	Query package(s) that have a given <replaceable>TID</replaceable>
+	transaction identifier. A unix time stamp is currently used as a
+	transaction identifier. All package(s) installed or erased within
+	a single transaction have a common identifier.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--triggeredby</option> <replaceable>PACKAGE_NAME</replaceable></term>
+    <listitem><para>
+	Query packages that are triggered by package(s)
+	<replaceable>PACKAGE_NAME</replaceable>.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--whatprovides</option> <replaceable>CAPABILITY</replaceable></term>
+    <listitem><para>
+	Query all packages that provide the <replaceable>CAPABILITY</replaceable> capability.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--whatrequires</option> <replaceable>CAPABILITY</replaceable></term>
+    <listitem><para>
+    Query all packages that requires <replaceable>CAPABILITY</replaceable> for proper functioning.
+    </para></listitem>
+    </varlistentry>
+    </variablelist>
+    </para>
+  </refsect2>
+
+  <refsect2><title>Package query options:</title>
+    <para>
+    <variablelist>
+    <varlistentry>
+    <term><option>--changelog</option></term>
+    <listitem><para>
+	Display change information for the package.
+    </para></ListItem>
+    </varlistentry><varlistentry>
+    <term><option>-c, --configfiles</option></term>
+    <listitem><para>
+	List only configuration files (implies <option>-l</option>).
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>-d, --docfiles</option></term>
+    <listitem><para>
+	List only documentation files (implies <option>-l</option>).
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--dump</option></term>
+    <listitem><para>
+	Dump file information as follows:
+	</para>
+	<blockquote><literallayout>
+path size mtime md5sum mode owner group isconfig isdoc rdev symlink
+	</literallayout></blockquote>
+	<para>
+	This option must be used with at least one of
+		<option>-l</option>,
+		<option>-c</option>,
+		<option>-d</option>.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--filesbypkg</option></term>
+    <listitem><para>
+	List all the files in each selected package.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>-i, --info</option></term>
+    <listitem><para>
+	Display package information, including name, version, and description.
+	This uses the <option>--queryformat</option> if one was specified.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--last</option></term>
+    <listitem><para>
+	Orders the package listing by install time such that the latest
+	packages are at the top.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>-l, --list</option></term>
+    <listitem><para>
+	List files in package.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--provides</option></term>
+    <listitem><para>
+	List capabilities this package provides.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>-R, --requires</option></term>
+    <listitem><para>
+	List packages on which this package depends.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--scripts</option></term>
+    <listitem><para>
+	List the package specific scriptlet(s) that are used as part
+	of the installation and uninstallation processes.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>-s, --state</option></term>
+    <listitem><para>
+	Display the <replaceable>states</replaceable> of files in the package
+	(implies <option>-l</option>).  The state of each file is one of
+	<replaceable>normal</replaceable>,
+	<replaceable>not installed</replaceable>, or
+	<replaceable>replaced</replaceable>.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--triggers, --triggerscripts</option></term>
+    <listitem><para>
+	Display the trigger scripts, if any, which are contained in
+	the package.
+    </para></listitem>
+    </varlistentry>
+    </variablelist>
+    </para>
+  </refsect2>
+
+  <refsect2><title>Verify Options</title>
+    <para>
+	The general form of an rpm verify command is 
+    </para>
+
+    <para>
+      <cmdsynopsis>
+	&rpm;
+	<arg choice="req"><option>-V|--verify</option></arg>
+	<arg><synopfragmentref linkend="select-options">
+	    select-options
+	  </synopfragmentref></arg>
+	<arg><synopfragmentref linkend="verify-options">
+	    verify-options
+	  </synopfragmentref></arg>
+      </cmdsynopsis>
+    </para>
+ 
+    <para>
+	Verifying a package compares information about the installed files in
+	the package with information about the files taken from the package
+	metadata stored in the rpm database.  Among other things, verifying
+	compares the size, MD5 sum, permissions, type, owner and group of
+	each file.  Any discrepancies are displayed.
+	Files that were not installed from the package, for example,
+	documentation files excluded on installation using the
+		"<option>--excludedocs</option>" option,
+	will be silently ignored.
+    </para>
+
+    <para>
+	The package selection options are the same as for package
+	querying (including package manifest files as arguments).
+	Other options unique to verify mode are:
+    <variablelist>
+    <varlistentry>
+    <term><option>--nodeps</option></term>
+    <listitem><para>
+	Don't verify dependencies of packages.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--nodigest</option></term>
+    <listitem><para>
+	Don't verify package or header digests when reading.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--nofiles</option></term>
+    <listitem><para>
+	Don't verify any attributes of package files.
+    </para></ListItem>
+    </varlistentry><varlistentry>
+    <term><option>--noscripts</option></term>
+    <listitem><para>
+	Don't execute the <command>%verifyscript</command> scriptlet (if any).
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--nosignature</option></term>
+    <listitem><para>
+	Don't verify package or header signatures when reading.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--nolinkto</option></term>
+    <term><option>--nomd5</option></term>
+    <term><option>--nosize</option></term>
+    <term><option>--nouser</option></term>
+    <term><option>--nogroup</option></term>
+    <term><option>--nomtime</option></term>
+    <term><option>--nomode</option></term>
+    <term><option>--nordev</option></term>
+    <listitem><para>
+	Don't verify the corresponding file attribute.
+    </para></listitem>
+    </varlistentry>
+    </variablelist>
+    </para>
+
+    <para>
+	The format of the output is a string of 8 characters, a possible
+	attribute marker:
+	<simplelist>
+	<member>
+		<command>c</command>
+		<command>%config</command> configuration file.
+	</member><member>
+		<command>d</command>
+		<command>%doc</command> documentation file.
+	</member><member>
+		<command>g</command>
+		<command>%ghost</command> file (i.e. the file contents are
+		not included in the package payload).
+	</member><member>
+		<command>l</command>
+		<command>%license</command> license file.
+	</member><member>
+		<command>r</command>
+		<command>%readme</command> readme file.
+	</member>
+	</simplelist>
+    </para><para>
+	from the package header, followed by the file name.
+    </para><para>
+	Each of the 8 characters denotes the result of a comparison of
+	attribute(s) of the file to the value of those attribute(s) recorded
+	in the database.  A single
+		"<command>.</command>" (period)
+	means the test passed, while a single
+		"<command>?</command>" (question mark)
+	indicates the test could not be performed (e.g. file permissions
+	prevent reading). Otherwise, the (mnemonically
+		em<command>B</command>oldened) character denotes failure of
+	the corresponding <option>--verify</option> test:
+
+	<simplelist>
+	<member>
+		<command>S</command>
+		file <command>S</command>ize differs
+	</member><member>
+		<command>M</command>
+		<command>M</command>ode differs (includes permissions and file type)
+	</member><member>
+		<command>5</command>
+		MD<command>5</command> sum differs
+	</member><member>
+		<command>D</command>
+		<command>D</command>evice major/minor number mismatch
+	</member><member>
+		<command>L</command>
+		read<command>L</command>ink(2) path mismatch
+	</member><member>
+		<command>U</command>
+		<command>U</command>ser ownership differs
+	</member><member>
+		<command>G</command>
+		<command>G</command>roup ownership differs
+	</member><member>
+		<command>T</command>
+		m<command>T</command>ime differs
+	</member>
+	</simplelist>
+    </para>
+  </refsect2>
+
+  <refsect2><title>Digital Signature and Digest Verification</title>
+    <para>
+	The general forms of rpm digital signature commands are
+    </para>
+
+    <para>
+      <cmdsynopsis>
+	&rpm;
+	<arg choice="req"><option>--import</option></arg>
+	<arg rep="repeat" choice="plain"><replaceable>PUBKEY</replaceable></arg>
+      </cmdsynopsis><cmdsynopsis>
+	&rpm;
+	<arg choice="plain"><option>--checksig</option></arg>
+	<arg><option>--nogpg</option></arg>
+	<arg><option>--nopgp</option></arg>
+	<arg><option>--nomd5</option></arg>
+	<arg rep="repeat" choice="plain"><replaceable>PACKAGE_FILE</replaceable></arg>
+      </cmdsynopsis>
+    </para>
+
+    <para>
+	The <option>--checksig</option> option checks all the digests and
+	signatures contained in <replaceable>PACKAGE_FILE</replaceable>
+	to ensure the integrity and origin of the package. Note that
+	signatures are now verified whenever a package is read, and
+	<option>--checksig</option> is useful to verify
+	all of the digests and signatures associated with a package.
+    </para>
+
+    <para>
+	Digital signatures cannot be verified without a public key.
+	An ASCII armored public key can be added to the &rpm database
+	using <option>--import</option>. An imported public key is
+	carried in a header, and key ring management is performed
+	exactly like package management. For example, all currently imported
+	public keys can be displayed by:
+    </para><para>
+<computeroutput>
+<command>&rpm -qa gpg-pubkey*</command>
+</computeroutput>
+    </para><para>
+	Details about a specific public key, when imported, can be displayed
+	by querying.  Here's information about the Red Hat GPG/DSA key:
+    </para><para>
+<computeroutput>
+<command>&rpm -qi gpg-pubkey-db42a60e</command>
+</computeroutput>
+    </para><para>
+	Finally, public keys can be erased after importing just like
+	packages. Here's how to remove the Red Hat GPG/DSA key
+    </para><para>
+<computeroutput>
+<command>&rpm -e gpg-pubkey-db42a60e</command>
+</computeroutput>
+    </para>
+  </refsect2>
+
+  <refsect2><title>Signing a Package</title>
+    <para>
+      <cmdsynopsis>
+	&rpm;
+	<arg choice="req"><option>--addsign|--resign</option></arg>
+	<arg rep="repeat" choice="plain"><replaceable>PACKAGE_FILE</replaceable></arg>
+      </cmdsynopsis>
+    </para>
+    <para>
+	Both of the <option>--addsign</option> and <option>--resign</option>
+	options generate and insert new signatures for each package
+	<replaceable>PACKAGE_FILE</replaceable> given, replacing any
+	existing signatures. There are two options for historical reasons,
+	there is no difference in behavior currently.
+    </para>
+  </refsect2>
+
+  <refsect2><title>Using GPG to sign packages</title>
+    <para>
+	In order to sign packages using GPG, &rpm;
+	must be configured to run GPG and be able to find a key
+	ring with the appropriate keys. By default,
+	&rpm; uses the same conventions as GPG
+	to find key rings, namely the <envar>$GNUPGHOME</envar> environment
+	variable.  If your key rings are not located where GPG expects
+	them to be, you will need to configure the macro
+		<command>%_gpg_path</command>
+	to be the location of the GPG key rings to use.
+    </para>
+    <para>
+	For compatibility with older versions of GPG, PGP, and rpm,
+	only V3 OpenPGP signature packets should be configured.
+	Either DSA or RSA verification algorithms can be used, but DSA
+	is preferred.
+    </para>
+
+    <para>
+	If you want to be able to sign packages you create yourself, you
+	also need to create your own public and secret key pair (see the
+	GPG manual). You will also need to configure the &rpm macros
+    <variablelist>
+    <varlistentry>
+    <term><command>%_signature</command></term>
+    <listitem><para>
+	The signature type.  Right now only gpg and pgp are supported.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><command>%_gpg_name</command></term>
+    <listitem><para>
+	The name of the "user" whose key you wish to use to sign your packages.
+    </para></listitem>
+    </varlistentry>
+    </variablelist>
+    </para>
+
+    <para>
+	For example, to be able to use GPG to sign packages as the user
+	<replaceable>"John Doe &lt;jdoe@foo.com&gt;"</replaceable>
+	from the key rings located in <filename>/etc/rpm/.gpg</filename>
+	using the executable <filename>/usr/bin/gpg</filename> you would include
+    </para><para>
+<computeroutput>
+%_signature gpg
+%_gpg_path /etc/rpm/.gpg
+%_gpg_name John Doe &lt;jdoe@foo.com&gt;
+%_gpgbin /usr/bin/gpg
+</computeroutput>
+    </para><para>
+	in a macro configuration file. Use <filename>/etc/rpm/macros</filename>
+	for per-system configuration and <filename>~/.rpmmacros</filename>
+	for per-user configuration. 
+    </para>
+  </refsect2>
+
+  <refsect2><title>Rebuild Database Options</title>
+    <para>
+	The general form of an rpm rebuild database command is 
+    </para>
+
+    <para>
+      <cmdsynopsis>
+	&rpm;
+	<arg choice="req"><option>--initdb|--rebuilddb</option></arg>
+	<arg><option>-v</option></arg>
+	<arg><option>--dbpath</option> <replaceable>DIRECTORY</replaceable></arg>
+	<arg><option>--root</option> <replaceable>DIRECTORY</replaceable></arg>
+      </cmdsynopsis>
+    </para>
+ 
+    <para>
+	Use <option>--initdb</option> to create a new database, use
+	<option>--rebuilddb</option> to rebuild the database indices from
+	the installed package headers.
+    </para>
+  </refsect2>
+
+  <refsect2><title>Showrc</title>
+    <para>
+	The command
+    </para>
+  
+    <para>
+      <cmdsynopsis>
+	&rpm;
+	<arg choice="plain"><option>--showrc</option></arg>
+      </cmdsynopsis>
+    </para>
+
+    <para>
+	shows the values &rpm; will use for all of the
+	options are currently set in
+		<filename>rpmrc</filename> and
+		<filename>macros</filename>
+	configuration file(s).
+    </para>
+  </refsect2>
+
+  <refsect2><title>Ftp/Http Options</title>
+    <para>
+	&rpm; can act as an FTP and/or HTTP client so
+	that packages can be queried or installed from the internet.
+	Package files for install, upgrade, and query operations may be
+	specified as an
+		<command>ftp</command> or
+		<command>http</command>
+	style URL:  
+    </para>
+
+    <para>
+	ftp://USER:PASSWORD@HOST:PORT/path/to/package.rpm
+    </para>
+ 
+    <para>
+	If the <command>:PASSWORD</command> portion is omitted, the password will be
+	prompted for (once per user/hostname pair). If both the user and
+	password are omitted, anonymous <command>ftp</command> is used.
+	In all cases, passive (PASV) <command>ftp</command> transfers are
+	performed.
+    </para>
+    <para>
+	&rpm; allows the following options to be used with
+	ftp URLs:
+    <variablelist>
+    <varlistentry>
+    <term><option>--ftpproxy</option> <replaceable>HOST</replaceable></term>
+    <listitem><para>
+	The host <replaceable>HOST</replaceable> will be used as a proxy server
+	for all ftp transfers, which allows users to ftp through firewall
+	machines which use proxy systems. This option may also be specified
+	by configuring the macro <command>%_ftpproxy</command>.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--ftpport</option> <replaceable>PORT</replaceable></term>
+    <listitem><para>
+	The TCP <replaceable>PORT</replaceable> number to use for
+	the ftp connection on the proxy ftp server instead of the default
+	port. This option may also be specified by configuring the macro
+	<command>%_ftpport</command>.
+    </para></listitem>
+    </varlistentry>
+    </variablelist>
+    </para>
+
+    <para>
+	&rpm; allows the following options to be used with
+	<command>http</command> URLs:
+    <variablelist>
+    <varlistentry>
+    <term><option>--httpproxy</option> <replaceable>HOST</replaceable></term>
+    <listitem><para>
+	The host <replaceable>HOST</replaceable> will be used as
+	a proxy server for all <command>http</command> transfers. This
+	option may also be specified by configuring the macro
+	<command>%_httpproxy</command>.
+    </para></listitem>
+    </varlistentry><varlistentry>
+    <term><option>--httpport</option> <replaceable>PORT</replaceable></term>
+    <listitem><para>
+	The TCP <replaceable>PORT</replaceable> number to use for the
+	<command>http</command> connection on the proxy http server instead
+	of the default port. This option may also be specified by configuring
+	the macro <command>%_httpport</command>.
+    </para></listitem>
+    </varlistentry>
+    </variablelist>
+    </para>
+  </refsect2>
+
+</refsect1>
+
+<refsect1><title>Legacy Issues</title>
+  <refsect2><title>Executing rpmbuild</title>
+    <para>
+    The build modes of rpm are now resident in the
+	<filename>/usr/bin/rpmbuild</filename>
+    executable. Although legacy compatibility provided by the popt aliases
+    below has been adequate, the compatibility is not perfect; hence build
+    mode compatibility through popt aliases is being removed from rpm.
+    Install the <command>rpm-build</command> package, and see
+	<command>rpmbuild</command>(8) for documentation of all the
+    <command>rpm</command> build modes previously documented here in
+	<command>rpm</command>(8).
+    </para><para>
+    Add the following lines to <filename>/etc/popt</filename>
+    if you wish to continue invoking <command>rpmbuild</command> from
+    the <command>rpm</command> command line:
+    </para><para>
+<computeroutput>
+rpm     exec --bp               rpmb -bp
+rpm     exec --bc               rpmb -bc
+rpm     exec --bi               rpmb -bi
+rpm     exec --bl               rpmb -bl
+rpm     exec --ba               rpmb -ba
+rpm     exec --bb               rpmb -bb
+rpm     exec --bs               rpmb -bs 
+rpm     exec --tp               rpmb -tp 
+rpm     exec --tc               rpmb -tc 
+rpm     exec --ti               rpmb -ti 
+rpm     exec --tl               rpmb -tl 
+rpm     exec --ta               rpmb -ta
+rpm     exec --tb               rpmb -tb
+rpm     exec --ts               rpmb -ts 
+rpm     exec --rebuild          rpmb --rebuild
+rpm     exec --recompile        rpmb --recompile
+rpm     exec --clean            rpmb --clean
+rpm     exec --rmsource         rpmb --rmsource
+rpm     exec --rmspec           rpmb --rmspec
+rpm     exec --target           rpmb --target
+rpm     exec --short-circuit    rpmb --short-circuit
+</computeroutput>
+    </para>
+  </refsect2>
+</refsect1>
+
+<refsect1><title>Files</title>
+  <refsect2><title>rpmrc Configuration</title>
+    <para>
+    <simplelist>
+	<member><filename>/usr/lib/rpm/rpmrc</filename></member>
+	<member><filename>/usr/lib/rpm/redhat/rpmrc</filename></member>
+	<member><filename>/etc/rpmrc</filename></member>
+	<member><filename>~/.rpmrc</filename></member>
+    </simplelist>
+    </para>
+  </refsect2>
+  <refsect2><title>Macro Configuration</title>
+    <para>
+    <simplelist>
+	<member><filename>/usr/lib/rpm/macros</filename></member>
+	<member><filename>/usr/lib/rpm/redhat/macros</filename></member>
+	<member><filename>/etc/rpm/macros</filename></member>
+	<member><filename>~/.rpmmacros</filename></member>
+    </simplelist>
+    </para>
+  </refsect2>
+  <refsect2><title>Database</title>
+    <para>
+    <simplelist>
+	<member><filename>/var/lib/rpm/Basenames</filename></member>
+	<member><filename>/var/lib/rpm/Conflictname</filename></member>
+	<member><filename>/var/lib/rpm/Dirnames</filename></member>
+	<member><filename>/var/lib/rpm/Filemd5s</filename></member>
+	<member><filename>/var/lib/rpm/Group</filename></member>
+	<member><filename>/var/lib/rpm/Installtid</filename></member>
+	<member><filename>/var/lib/rpm/Name</filename></member>
+	<member><filename>/var/lib/rpm/Packages</filename></member>
+	<member><filename>/var/lib/rpm/Providename</filename></member>
+	<member><filename>/var/lib/rpm/Provideversion</filename></member>
+	<member><filename>/var/lib/rpm/Requirename</filename></member>
+	<member><filename>/var/lib/rpm/Requireversion</filename></member>
+	<member><filename>/var/lib/rpm/Sha1header</filename></member>
+	<member><filename>/var/lib/rpm/Sigmd5</filename></member>
+	<member><filename>/var/lib/rpm/Triggername</filename></member>
+    </simplelist>
+    </para>
+  </refsect2>
+  <refsect2><title>Temporary</title>
+    <para>
+    <simplelist>
+	<member><filename>/var/tmp/rpm*</filename></member>
+    </simplelist>
+    </para>
+  </refsect2>
+</refsect1>
+
+<refsect1><title>See Also</title>
+    <simplelist>
+      <member><command>popt</command>(3),</member>
+      <member><command>rpm2cpio</command>(8),</member>
+      <member><command>rpmbuild</command>(8),</member>
+      <member>
+	<command>
+	<ulink URL="http://www.rpm.org/">http://www.rpm.org/</ulink>
+	</command>
+      </member>
+    </simplelist>
+</refsect1>
+
+<refsect1><title>Authors</title>
+      <simplelist>
+	<member>Marc Ewing &lt;marc@redhat.com&gt;</member>
+	<member>Jeff Johnson &lt;jbj@redhat.com&gt;</member>
+	<member>Erik Troan &lt;ewt@redhat.com&gt;</member>
+      </simplelist>
+</refsect1>
+
+  </RefEntry>

@@ -1,0 +1,1412 @@
+  <chapter id="ch-rpm-subpack">
+    <title>Creating Subpackages</title>
+    <!-- label: rpm-subpack -->
+
+    <indexterm>
+      <primary>subpackages</primary>
+    </indexterm>
+
+    <para>
+      In this chapter, we will explore one of RPM's more interesting
+      capabilities: the capability to create subpackages.
+    </para>
+
+    <sect1 id="s1-rpm-subpack-what-are-they">
+      <title>What Are Subpackages?</title>
+
+      <indexterm>
+        <primary>subpackages</primary>
+        <secondary>definition of</secondary>
+      </indexterm>
+
+      <para>
+        Very simply put, a subpackage is one of several package files created
+        from a single spec file.  RPM has the ability to create a main package,
+        along with one or more subpackages.  Subpackages may also be created
+        without the main package.  It's all up to the package builder.
+      </para>
+    </sect1>
+
+    <sect1 id="s1-rpm-subpack-why">
+      <title>Why Are They Needed?</title>
+
+      <indexterm>
+        <primary>subpackages</primary>
+        <secondary>why needed</secondary>
+      </indexterm>
+
+      <para>
+        If all the software in the world followed the usual "one source, one
+        binary" structure, there would be no need for subpackages.  After all,
+        RPM handles the building and packaging of a program into a single
+        package file just fine.
+      </para>
+
+      <para>
+        But software doesn't always conform to this simplistic structure.  It's
+        not unusual for software to support two or more different modes of
+        operation.  A client/server program, for example, comes in two flavors:
+        a client, and a server.
+      </para>
+
+      <para>
+        And it can get more complicated than that.  Sometimes software relies on
+        another program so completely that the two cannot be built separately.
+        The result is often several packages.
+      </para>
+
+      <para>
+        While it is certainly possible that some convoluted procedure could be
+        devised to force these kinds of software into a single-package
+        structure, it makes more sense to let RPM manage the creation of
+        subpackages.  Why?  From the package builder's viewpoint, the main
+        reason to use subpackages is to eliminate any duplication of effort.
+      </para>
+
+      <para>
+        By using subpackages, there's no need to maintain separate spec files
+        and endure the resulting headaches when new versions of the software
+        become available.  By keeping everything in one spec file, new software
+        versions can be quickly integrated, and every related subpackage rebuilt
+        with a single command.
+      </para>
+
+      <para>
+        But that's enough of the preliminaries.  Let's see how subpackages are
+        created.
+      </para>
+    </sect1>
+
+    <sect1 id="s1-rpm-subpack-example-intro">
+      <title>Our Example Spec File: Subpackages Galore!</title>
+
+      <indexterm>
+        <primary>subpackages</primary>
+        <secondary>example requirements</secondary>
+      </indexterm>
+
+      <para>
+        Throughout this chapter, we'll be constructing a spec file that will
+        consist of a number of subpackages.  Let's start by listing the spec
+        file's requirements:
+
+        <itemizedlist mark="bullet">
+          <listitem>
+            <para>
+              The main package name is to be <filename>foo</filename>.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              The version is to be 2.7.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              There are three subpackages:
+              <itemizedlist mark="bullet">
+                <listitem>
+                  <para>
+                    The server subpackage, to be called
+                    <filename>foo-server</filename>.
+                  </para>
+                </listitem>
+
+                <listitem>
+                  <para>
+                    The client subpackage, to be called
+                    <filename>foo-client</filename>.
+                  </para>
+                </listitem>
+
+                <listitem>
+                  <para>
+                    The <filename>baz</filename> development library subpackage,
+                    to be called <filename>bazlib</filename>.
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              The <filename>bazlib</filename> subpackage has a version of 5.6.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              Each subpackage will have its own <command>summary</command> and
+              <command>description</command> tags.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+
+      <para>
+        Every spec file starts with a preamble, and this one is no different.
+        In this case, the preamble will contain the following tags:
+
+        <screen width="60">
+<computeroutput>
+Name: foo
+Version: 2.7
+Release: 1
+Source: foo-2.7.tgz
+License: probably not
+Summary: The foo app, and the baz library needed to build it
+Group: bogus/junque
+%description
+This is the long description of the foo app, and the baz library needed to
+build it...
+</computeroutput>
+        </screen>
+      </para>
+
+      <para>
+        As we can see, there's nothing different here: this is an ordinary spec
+        file so far.  Let's delve into things a bit more and see what we'll need
+        to add to this spec file to create the subpackages we require.
+      </para>
+    </sect1>
+
+    <sect1 id="s1-rpm-subpack-spec-file-changes">
+      <title>Spec File Changes For Subpackages</title>
+
+      <indexterm>
+        <primary>subpackages</primary>
+        <secondary>spec file changes</secondary>
+      </indexterm>
+
+      <para>
+        The creation of subpackages is based strictly on the contents of the
+        spec file.  This doesn't mean that you'll have to learn an entirely new
+        set of tags, conditionals, and directives in order to create
+        subpackages.  In fact, you'll only need to learn one.
+      </para>
+
+      <para>
+        The primary change to a spec file is structural and starts with the
+        definition of a preamble for each subpackage.
+      </para>
+
+      <sect2 id="s2-rpm-subpack-subpackage-preamble">
+        <title>The Subpackage's "Preamble"</title>
+
+        <para>
+          When we introduced RPM package building in <xref
+          linkend="ch-rpm-basics">, we said that every spec file contains a
+          preamble.  The preamble contains a variety of tags that define all
+          sorts of information about the package.  In a single package
+          situation, the preamble must be at the start of the spec file.  The
+          spec file we're creating will have one there, too.
+        </para>
+
+        <para>
+          When creating a spec file that will build subpackages, each subpackage
+          also needs a preamble of its own.  These "sub-preambles" need only
+          define information for the subpackage when that information differs
+          from what is defined in the main preamble.  For example, if we wanted
+          to define an installation prefix for a subpackage, we would add the
+          appropriate <command>prefix</command> tag to that subpackage's
+          preamble.
+          <indexterm>
+            <primary><command>prefix</command> tag</primary>
+          </indexterm>
+          That subpackage would then be relocatable.
+        </para>
+
+        <para>
+          In a single-package spec file, there is nothing that explicitly
+          identifies the preamble, other than its position at the top of the
+          file.  For subpackages, however, we need to be a bit more explicit.
+          So we use the <command>%package</command> directive to identify the
+          preamble for each subpackage.
+        </para>
+
+        <sect3 id="s3-rpm-subpack-package-directive">
+          <title>The <command>%package</command> Directive</title>
+
+          <indexterm>
+            <primary>subpackages</primary>
+            <secondary><command>%package</command> directive</secondary>
+          </indexterm>
+
+          <indexterm>
+            <primary><command>%package</command> directive</primary>
+          </indexterm>
+
+          <para>
+            The <command>%package</command> directive actually performs two
+            functions.  As we mentioned above, it is used to denote the start of
+            a subpackage's preamble.  It also plays a role in forming the
+            subpackage's name.  As an example, let's say the main preamble
+            contains the following <command>name</command> tag:
+
+            <screen width="60">
+<computeroutput>
+name: foo
+</computeroutput>
+            </screen>
+          </para>
+
+          <para>
+            Later in the spec file, there is a <command>%package</command>
+            directive:
+
+            <screen width="60">
+<computeroutput>
+%package bar
+</computeroutput>
+            </screen>
+          </para>
+
+          <para>
+            This would result in the name of the subpackage being
+            <filename>foo-bar</filename>.
+          </para>
+
+          <para>
+            In this way, it's easy to see the relationship of the subpackage to
+            the main package (or other subpackages, for that matter).  Of
+            course, this naming convention might not be appropriate in every
+            case.  So there is an option to the <command>%package</command>
+            directive for just this circumstance.
+          </para>
+        </sect3>
+
+        <sect3 id="s3-rpm-subpack-package-directive-n-option">
+          <title>
+            Adding <command>-n</command> To the <command>%package</command>
+            directive
+          </title>
+
+          <indexterm>
+            <primary>subpackages</primary>
+            <secondary><command>%package</command> directive</secondary>
+            <tertiary><command>-n</command> option</tertiary>
+          </indexterm>
+
+          <indexterm>
+            <primary><command>%package</command> directive</primary>
+            <secondary><command>-n</command> option</secondary>
+          </indexterm>
+
+          <para>
+            The <command>-n</command> option is used to change the final name of
+            a subpackage from
+            <filename><replaceable>&lt;mainpackage&gt;</replaceable>-<replaceable>&lt;subpackage&gt;</replaceable></filename>
+            to
+            <filename><replaceable>&lt;subpackage&gt;</replaceable></filename>.
+            Let's modify the <command>%package</command> directive in our
+            example above to be:
+
+            <screen width="60">
+<computeroutput>
+%package -n bar
+</computeroutput>
+            </screen>
+          </para>
+
+          <para>
+            The result is that the subpackage name would then be
+            <filename>bar</filename> instead of <filename>foo-bar</filename>.
+          </para>
+        </sect3>
+
+        <sect3 id="s3-rpm-subpack-updating-spec-file">
+          <title>Updating Our Spec File</title>
+
+          <para>
+            Let's apply some of our newly found knowledge to the spec file we're
+            writing.  Here's the list of subpackages that we need to create:
+
+            <itemizedlist mark="bullet">
+              <listitem>
+                <para>
+                  The server subpackage, to be called
+                  <filename>foo-server</filename>.
+                </para>
+              </listitem>
+
+              <listitem>
+                <para>
+                  The client subpackage, to be called
+                  <filename>foo-client</filename>.
+                </para>
+              </listitem>
+
+              <listitem>
+                <para>
+                  The <filename>baz</filename> development library subpackage,
+                  to be called <filename>bazlib</filename>.
+                </para>
+              </listitem>
+            </itemizedlist>
+          </para>
+
+          <para>
+            Since our package name is <filename>foo</filename>, and since the
+            <command>%package</command> directive creates subpackage names by
+            prepending the package name, the <command>%package</command>
+            directives for the <filename>foo-server</filename> and
+            <filename>foo-client</filename> subpackages would be written as:
+
+            <screen width="60">
+<computeroutput>
+%package server
+%package client
+</computeroutput>
+            </screen>
+          </para>
+
+          <para>
+            Since the <filename>baz</filename> library's package name is
+            <emphasis>not</emphasis> to start with <filename>foo</filename>, we
+            need to use the <command>-n</command> option on its
+            <command>%package</command> directive:
+
+            <screen width="60">
+<computeroutput>
+%package -n bazlib
+</computeroutput>
+            </screen>
+          </para>
+
+          <para>
+            Our requirements further state that <filename>foo-server</filename>
+            and <filename>foo-client</filename> are to have the same version as
+            the main package.
+          </para>
+
+          <para>
+            One of the time-saving aspects of using subpackages is that there is
+            no need to duplicate information for each subpackage if it is
+            already defined in the main package.  Therefore, since the main
+            package's preamble has a <command>version</command> tag defining the
+            version as 2.7, the two subpackages that lack a
+            <command>version</command> tag in their preambles will simply
+            inherit the main package's version definition.
+          </para>
+
+          <para>
+            Since the <filename>bazlib</filename> subpackage's preamble contains
+            a <command>version</command> tag, it must have its own unique
+            version.
+          </para>
+
+          <para>
+            In addition, each subpackage must have its own
+            <command>summary</command> tag.
+          </para>
+
+          <para>
+            So based on these requirements, our spec file now looks like this:
+
+            <screen width="60">
+<computeroutput>
+Name: foo
+Version: 2.7
+Release: 1
+Source: foo-2.7.tgz
+License: probably not
+Summary: The foo app, and the baz library needed to build it
+Group: bogus/junque
+%description
+This is the long description of the foo app, and the baz library needed to
+build it...
+
+%package server
+Summary: The foo server
+
+%package client
+Summary: The foo client
+
+%package -n bazlib
+Version: 5.6
+Summary: The baz library
+</computeroutput>
+            </screen>
+          </para>
+
+          <para>
+            We can see the subpackage structure starting to appear now.
+          </para>
+        </sect3>
+
+        <sect3 id="s3-rpm-subpack-required-tags">
+          <title>Required Tags In Subpackages</title>
+
+          <indexterm>
+            <primary>subpackages</primary>
+            <secondary>tags required by</secondary>
+          </indexterm>
+
+          <para>
+            There are a few more tags we should add to the subpackages in our
+            example spec file.  In fact, if these tags are
+            <emphasis>not</emphasis> present, RPM will issue a most impressive
+            warning:
+
+            <screen width="60">
+<prompt># </prompt>&rpmb; <userinput>-ba foo-2.7.spec</userinput>
+<computeroutput>
+* Package: foo
+* Package: foo-server
+Field must be present    : Description
+Field must be present    : Group
+* Package: foo-client
+Field must be present    : Description
+Field must be present    : Group
+* Package: bazlib
+Field must be present    : Description
+Field must be present    : Group
+
+Spec file check failed!!
+Tell rpm-list@redhat.com if this is incorrect.
+</computeroutput>
+<prompt>#</prompt>
+            </screen>
+          </para>
+
+          <para>
+            Our spec file is incomplete.  The bottom line is that each
+            subpackage <emphasis>must</emphasis> have these three tags:
+
+            <orderedlist>
+              <listitem>
+                <para>
+                  The <command>%description</command> tag.
+                </para>
+              </listitem>
+
+              <listitem>
+                <para>
+                  The <command>group</command> tag.
+                </para>
+              </listitem>
+
+              <listitem>
+                <para>
+                  The <command>summary</command> tag.
+                </para>
+              </listitem>
+            </orderedlist>
+          </para>
+
+          <para>
+            It's easy to see that the first two tags are required, but what
+            about <command>summary</command>?  Well, we lucked out on that one:
+            we already included a <command>summary</command> for each subpackage
+            in our example spec file.
+          </para>
+
+          <para>
+            Let's take a look at the <command>%description</command> tag first.
+          </para>
+        </sect3>
+
+        <sect3 id="s3-rpm-subpack-description-tag">
+          <title>The <command>%description</command> Tag</title>
+
+          <para>
+            As you've probably noticed, the <command>%description</command> tag
+            differs from other tags.  First of all, it starts with a percent
+            sign.  Secondly, its data can span multiple lines.  The third
+            difference is that the <command>%description</command> tag must
+            include the name of the subpackage it describes.  This is done by
+            appending the subpackage name to the <command>%description</command>
+            tag itself.  So given these <command>%package</command> directives:
+
+            <screen width="60">
+<computeroutput>
+%package server
+%package client
+%package -n bazlib
+</computeroutput>
+            </screen>
+          </para>
+
+          <para>
+            our <command>%description</command> tags would start with:
+
+            <screen width="60">
+<computeroutput>
+%description server
+%description client
+%description -n bazlib
+</computeroutput>
+            </screen>
+          </para>
+
+          <para>
+            Notice that we've included the <command>-n</command> option in the
+            <command>%description</command> tag for <filename>bazlib</filename>.
+            This was intentional, as it makes the name completely unambiguous.
+          </para>
+        </sect3>
+
+        <sect3 id="s3-rpm-subpack-spec-file-so-far">
+          <title>Our Spec File So Far&hellip;</title>
+
+          <para>
+            OK, let's take a look at the spec file after we've added the
+            appropriate <command>%description</command>s, along with
+            <command>group</command> tags for each subpackage:
+
+            <screen width="60">
+<computeroutput>
+Name: foo
+Version: 2.7
+Release: 1
+Source: foo-2.7.tgz
+License: probably not
+Summary: The foo app, and the baz library needed to build it
+Group: bogus/junque
+%description
+This is the long description of the foo app, and the baz library needed to
+build it...
+
+%package server
+Summary: The foo server
+Group: bogus/junque
+%description server
+This is the long description for the foo server...
+
+%package client
+Summary: The foo client
+Group: bogus/junque
+%description client
+This is the long description for the foo client...
+
+%package -n bazlib
+Version: 5.6
+Summary: The baz library
+Group: bogus/junque
+%description -n bazlib
+This is the long description for the bazlib...
+</computeroutput>
+            </screen>
+          </para>
+
+          <para>
+            Let's take a look at what we've done.  We've created a main preamble
+            as we normally would.  We then created three additional preambles,
+            each starting with a <command>%package</command> directive.
+            Finally, we added a few tags to the subpackage preambles.
+          </para>
+
+          <para>
+            But what about <command>version</command> tags?  Aren't the
+            <filename>server</filename> and <filename>client</filename>
+            subpackages missing them?
+          </para>
+
+          <para>
+            Not really.  Remember that if a subpackage is missing a given tag,
+            it will inherit the value of that tag from the main preamble.  We're
+            well on our way to having a complete spec file, but we aren't quite
+            there yet.
+          </para>
+
+          <para>
+            Let's continue by looking at the next part of the spec file that
+            changes when building subpackages.
+          </para>
+        </sect3>
+      </sect2>
+
+      <sect2 id="s2-rpm-subpack-files-list">
+        <title>The <command>%files</command> List</title>
+
+        <indexterm>
+          <primary>subpackages</primary>
+          <secondary><command>%files</command> list changes</secondary>
+        </indexterm>
+
+        <para>
+          In an ordinary single-package spec file, the <command>%files</command>
+          list is used to determine which files are actually going to be
+          packaged.  It is no different when building subpackages.  What
+          <emphasis>is</emphasis> different, is that there must be a
+          <command>%files</command> list for each subpackage.
+        </para>
+
+        <para>
+          Since each <command>%files</command> list must be associated with a
+          particular <command>%package</command> directive, we simply label each
+          <command>%files</command> list with the name of the subpackage, as
+          specified by each <command>%package</command> directive. Going back to
+          our example, our <command>%package</command> lines were:
+
+          <screen width="60">
+<computeroutput>
+%package server
+%package client
+%package -n bazlib
+</computeroutput>
+          </screen>
+        </para>
+
+        <para>
+          Therefore, our <command>%files</command> lists should start with:
+
+          <screen width="60">
+<computeroutput>
+%files server
+%files client
+%files -n bazlib
+</computeroutput>
+          </screen>
+        </para>
+
+        <para>
+          In addition, we need the main package's <command>%files</command>
+          list, which remains unnamed:
+
+          <screen width="60">
+<computeroutput>
+%files
+</computeroutput>
+          </screen>
+        </para>
+
+        <para>
+          The contents of each <command>%files</command> list is dictated
+          entirely by the software's requirements.  If, for example, a certain
+          file needs to be packaged in more than one package, it's perfectly all
+          right to include the filename in more than one list.
+        </para>
+
+        <sect3 id="s3-rpm-subpack-controlling-packages">
+          <title>
+            Controlling Packages With the <command>%files</command> List
+          </title>
+
+          <para>
+            The <command>%files</command> list wields considerable power over
+            subpackages.  It's even possible to prevent a package from being
+            created by using the <command>%files</command> list.  But is there a
+            reason why you'd want to go to the trouble of setting up
+            subpackages, only to keep one from being created?
+          </para>
+
+          <para>
+            Actually, there is.  Take, for example, the case where
+            client/server-based software is to be packaged.  Certainly, it makes
+            sense to create two subpackages: one for the client and one for the
+            server.  But what about the main package?  Is there any need for it?
+          </para>
+
+          <para>
+            Quite often there's no need for a main package.  In those cases,
+            removing the main <command>%files</command> list entirely will
+            result in no main package being built.
+          </para>
+        </sect3>
+
+        <sect3 id="s3-rpm-subpack-point-worth-noting">
+          <title>A Point Worth Noting</title>
+
+          <para>
+            Please keep in mind that an empty <command>%files</command> list
+            (ie, a <command>%files</command> list that contains no files) is
+            <emphasis>not</emphasis> the same as not having a
+            <command>%files</command> list at all.  As we noted above, entirely
+            removing a <command>%files</command> list results in RPM not
+            creating that package.  However, if RPM comes across a
+            <command>%files</command> list with no files, it will happily create
+            an empty package file.
+          </para>
+
+          <para>
+            This feature (which also works with subpackage
+            <command>%files</command> lists) comes in handy when used in concert
+            with conditionals.  If a <command>%files</command> list is enclosed
+            by a conditional, the package will be created (or not) based on the
+            evaluation of the conditional.
+          </para>
+        </sect3>
+
+        <sect3 id="s3-rpm-subpack-spec-file-revisited">
+          <title>Our Spec File So Far&hellip;</title>
+
+          <para>
+            Ok, let's update our example spec file.  Here's what it looks like
+            after adding each of the subpackages' <command>%files</command>
+            lists:
+
+            <screen width="60">
+<computeroutput>
+Name: foo
+Version: 2.7
+Release: 1
+Source: foo-2.7.tgz
+License: probably not
+Summary: The foo app, and the baz library needed to build it
+Group: bogus/junque
+%description
+This is the long description of the foo app, and the baz library needed to
+build it...
+
+%package server
+Summary: The foo server
+Group: bogus/junque
+
+%package client
+Summary: The foo client
+Group: bogus/junque
+
+%package -n bazlib
+Version: 5.6
+Summary: The baz library
+Group: bogus/junque
+
+
+%files
+/usr/local/foo-file
+
+%files server
+/usr/local/server-file
+
+%files client
+/usr/local/client-file
+
+%files -n bazlib
+/usr/local/bazlib-file
+</computeroutput>
+            </screen>
+          </para>
+
+          <para>
+            As you can see we've added <command>%files</command> lists for:
+
+            <itemizedlist mark="bullet">
+              <listitem>
+                <para>
+                  The main <filename>foo</filename> package.
+                </para>
+              </listitem>
+
+              <listitem>
+                <para>
+                  The <filename>foo-server</filename> subpackage.
+                </para>
+              </listitem>
+
+              <listitem>
+                <para>
+                  The <filename>foo-client</filename> subpackage.
+                </para>
+              </listitem>
+
+              <listitem>
+                <para>
+                  The <filename>bazlib</filename> subpackage.
+                </para>
+              </listitem>
+            </itemizedlist>
+          </para>
+
+          <para>
+            Each package contains a single file.
+            <footnote>
+              <para>
+                Hey, we said it was a simple example!
+              </para>
+            </footnote>
+            If there was no need for a main package, we could simply remove the
+            unnamed <command>%files</command> list.  Keep in mind that even if
+            you do not create a main package, the tags defined in the main
+            package's preamble <emphasis>will</emphasis> appear somewhere
+            &mdash; specifically, in the source package file.
+          </para>
+
+          <para>
+            Let's look at the last subpackage-specific part of the spec file:
+            the install- and erase-time scripts.
+          </para>
+        </sect3>
+      </sect2>
+
+      <sect2 id="s2-rpm-subpack-install-erase-scripts">
+        <title>Install- and Erase-time Scripts</title>
+
+        <indexterm>
+          <primary>subpackages</primary>
+          <secondary>script changes</secondary>
+        </indexterm>
+
+        <para>
+          The install- and erase-time scripts, <command>%pre</command>,
+          <command>%preun</command>, <command>%post</command>, and
+          <command>%postun</command>, can all be named using exactly the same
+          method as was used for the other subpackage-specific sections of the
+          spec file.  The script used during package verification,
+          <command>%verifyscript</command>, can be made package-specific as
+          well.  Using the subpackage structure from our example spec file, we
+          would end up with script definitions like:
+
+          <itemizedlist mark="bullet">
+            <listitem>
+              <para>
+                <command>%pre server</command>
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>%postun client</command>
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>%preun -n bazlib</command>
+              </para>
+            </listitem>
+
+            <listitem>
+              <para>
+                <command>%verifyscript client</command>
+              </para>
+            </listitem>
+          </itemizedlist>
+        </para>
+
+        <para>
+          Other than the change in naming, there's only one thing to be aware of
+          when creating scripts for subpackages.  It's important that you
+          consider the possibility of scripts from various subpackages
+          interacting with each other.  Of course, this is simply good
+          script-writing practice, even if the packages involved are not
+          related.
+        </para>
+
+        <sect3 id="s3-rpm-subpack-spec-file-listing-scripts">
+          <title>Back At the Spec File&hellip;</title>
+
+          <para>
+            Here we've added some scripts to our spec file.  So that our example
+            doesn't get too complex, we've just added preinstall scripts for
+            each package:
+
+            <screen width="60">
+<computeroutput>
+Name: foo
+Version: 2.7
+Release: 1
+Source: foo-2.7.tgz
+License: probably not
+Summary: The foo app, and the baz library needed to build it
+Group: bogus/junque
+%description
+This is the long description of the foo app, and the baz library needed to
+build it...
+
+%package server
+Summary: The foo server
+Group: bogus/junque
+%description server
+This is the long description for the foo server...
+
+%package client
+Summary: The foo client
+Group: bogus/junque
+%description client
+This is the long description for the foo client...
+
+%package -n bazlib
+Version: 5.6
+Summary: The baz library
+Group: bogus/junque
+%description -n bazlib
+This is the long description for the bazlib...
+
+
+%pre
+echo "This is the foo package preinstall script"
+
+%pre server
+echo "This is the foo-server subpackage preinstall script"
+
+%pre client
+echo "This is the foo-client subpackage preinstall script"
+
+%pre -n bazlib
+echo "This is the bazlib subpackage preinstall script"
+
+%files
+/usr/local/foo-file
+
+%files server
+/usr/local/server-file
+
+%files client
+/usr/local/client-file
+
+%files -n bazlib
+/usr/local/bazlib-file
+</computeroutput>
+            </screen>
+          </para>
+
+          <para>
+            As pre-install scripts go, these don't do very much.  But they will
+            allow us to see how subpackage-specific scripts can be defined.
+          </para>
+
+          <para>
+            Those of you that have built packages before probably realize that
+            our spec file is missing something.  Let's add that part now.
+          </para>
+        </sect3>
+      </sect2>
+    </sect1>
+
+    <sect1 id="s1-rpm-subpack-build-time-scripts">
+      <title>Build-Time Scripts: Unchanged For Subpackages</title>
+
+      <indexterm>
+        <primary>subpackages</primary>
+        <secondary>build-time scripts, unchanged</secondary>
+      </indexterm>
+
+      <para>
+        While creating subpackages changes the general structure of the spec
+        file, there's one section that doesn't change: the build-time scripts.
+        This means there is only one set of <command>%prep</command>,
+        <command>%build</command>, and <command>%install</command> scripts in
+        any spec file.
+      </para>
+
+      <para>
+        Of course, even if RPM doesn't require any changes to these scripts, you
+        still might need to make some subpackage-related changes to them.
+        Normally these changes are related to doing whatever is required to get
+        the all the software unpacked, built, and installed.  For example, if
+        packaging client/server software, the software for both the client
+        <emphasis>and</emphasis> the server must be unpacked, and then both the
+        client <emphasis>and</emphasis> server binaries must be built and
+        installed.
+      </para>
+
+      <sect2 id="s2-rpm-subpack-one-last-look">
+        <title>Our Spec File: One Last Look&hellip;</title>
+
+        <para>
+          Let's add some build-time scripts and take a final look at the spec
+          file:
+
+          <screen width="60">
+<computeroutput>
+Name: foo
+Version: 2.7
+Release: 1
+Source: foo-2.7.tgz
+License: probably not
+Summary: The foo app, and the baz library needed to build it
+Group: bogus/junque
+%description
+This is the long description of the foo app, and the baz library needed to
+build it...
+
+%package server
+Summary: The foo server
+Group: bogus/junque
+%description server
+This is the long description for the foo server...
+
+%package client
+Summary: The foo client
+Group: bogus/junque
+%description client
+This is the long description for the foo client...
+
+%package -n bazlib
+Version: 5.6
+Summary: The baz library
+Group: bogus/junque
+%description -n bazlib
+This is the long description for the bazlib...
+
+%prep
+%setup
+
+%build
+make
+
+%install
+make install
+
+%pre
+echo "This is the foo package preinstall script"
+
+%pre server
+echo "This is the foo-server subpackage preinstall script"
+
+#%pre client
+#echo "This is the foo-client subpackage preinstall script"
+
+%pre -n bazlib
+echo "This is the bazlib subpackage preinstall script"
+
+%files
+/usr/local/foo-file
+
+%files server
+/usr/local/server-file
+
+%files client
+/usr/local/client-file
+
+%files -n bazlib
+/usr/local/bazlib-file
+</computeroutput>
+          </screen>
+        </para>
+
+        <para>
+          As you can see, the build-time scripts are about as simple as they can
+          be.
+          <footnote>
+            <para>
+              This is the advantage to making up an example.  A more real-world
+              spec file would undoubtedly have more interesting scripts.
+            </para>
+          </footnote>
+        </para>
+      </sect2>
+    </sect1>
+
+    <sect1 id="s1-rpm-subpack-building-subpackages">
+      <title>Building Subpackages</title>
+
+      <indexterm>
+        <primary>subpackages</primary>
+        <secondary>building</secondary>
+      </indexterm>
+
+      <para>
+        Now it's time to give our example spec file a try.  The build process is
+        not that much different from a single-package spec file:
+
+        <screen width="60">
+<prompt># </prompt>&rpmb; <userinput>-ba foo-2.7.spec</userinput>
+<computeroutput>
+* Package: foo
+* Package: foo-server
+* Package: foo-client
+* Package: bazlib
+&hellip;
+Executing: %prep
+&hellip;
+Executing: %build
+&hellip;
+Executing: %install
+&hellip;
+Executing: special doc
++ cd /usr/src/redhat/BUILD
++ cd foo-2.7
++ DOCDIR=//usr/doc/foo-2.7-1
++ DOCDIR=//usr/doc/foo-server-2.7-1
++ DOCDIR=//usr/doc/foo-client-2.7-1
++ DOCDIR=//usr/doc/bazlib-5.6-1
++ exit 0
+Binary Packaging: foo-2.7-1
+Finding dependencies...
+usr/local/foo-file
+1 block
+Generating signature: 0
+Wrote: /usr/src/redhat/RPMS/i386/foo-2.7-1.i386.rpm
+Binary Packaging: foo-server-2.7-1
+Finding dependencies...
+usr/local/server-file
+1 block
+Generating signature: 0
+Wrote: /usr/src/redhat/RPMS/i386/foo-server-2.7-1.i386.rpm
+Binary Packaging: foo-client-2.7-1
+Finding dependencies...
+usr/local/client-file
+1 block
+Generating signature: 0
+Wrote: /usr/src/redhat/RPMS/i386/foo-client-2.7-1.i386.rpm
+Binary Packaging: bazlib-5.6-1
+Finding dependencies...
+usr/local/bazlib-file
+1 block
+Generating signature: 0
+Wrote: /usr/src/redhat/RPMS/i386/bazlib-5.6-1.i386.rpm
+&hellip;
+Source Packaging: foo-2.7-1
+foo-2.7.spec
+foo-2.7.tgz
+4 blocks
+Generating signature: 0
+Wrote: /usr/src/redhat/SRPMS/foo-2.7-1.src.rpm
+</computeroutput>
+<prompt>#</prompt>
+        </screen>
+      </para>
+
+      <para>
+        Starting at the top, we start the build with the usual command.
+        Immediately following the command, RPM indicates that four packages are
+        to be built from this spec file.  The <command>%prep</command>,
+        <command>%build</command>, and <command>%install</command> scripts then
+        execute as usual.
+      </para>
+
+      <para>
+        Next, RPM executes its "special doc" internal script, even though we
+        haven't declared any files to be documentation.  It's worth noting,
+        however, that the <envar>DOCDIR</envar> environment variables show that
+        if the spec file <emphasis>had</emphasis> declared some of the files as
+        documentation, RPM would have created the appropriate documentation
+        directories for each of the packages.
+      </para>
+
+      <para>
+        At this point, RPM creates the binary packages.  As we can see, each
+        package contains the file defined in its <command>%files</command> list.
+      </para>
+
+      <para>
+        Finally, the source package file is created.  It contains the spec file
+        and the original sources, just like any other source package.
+      </para>
+
+      <para>
+        One spec file.  One set of sources.  One build command.  Four packages.
+        <footnote>
+          <para>
+            Five, if you count the source package.
+          </para>
+        </footnote>
+        All in all, a pretty good deal, isn't it?
+      </para>
+
+      <sect2 id="s2-rpm-subpack-subpackage-testing">
+        <title>Giving Subpackages the Once-Over</title>
+
+        <indexterm>
+          <primary>subpackages</primary>
+          <secondary>testing</secondary>
+        </indexterm>
+
+        <para>
+          Let's take a look at our newly created packages.  As with any other
+          package, each subpackage should be tested by installing it on a system
+          that has not had that software installed before.  In this section,
+          we'll just snoop around the subpackages and point out how they differ
+          from packages built one to a spec file.
+        </para>
+
+        <para>
+          First, let's just look at each package's information:
+
+          <screen width="60">
+<prompt># </prompt><userinput>rpm -qip foo-2.7-1.i386.rpm</userinput>
+<computeroutput>
+Name        : foo                   Distribution: (none)
+Version     : 2.7                         Vendor: (none)
+Release     : 1                       Build Date: Wed Nov 06 13:33:37 1996
+Install date: (none)                  Build Host: foonly.rpm.org
+Group       : bogus/junque            Source RPM: foo-2.7-1.src.rpm
+Size        : 35
+Summary     : The foo app, and the baz library needed to build it
+Description :
+This is the long description of the foo app, and the baz library needed to
+build it...
+</computeroutput>
+<prompt>#</prompt>
+<prompt># </prompt><userinput>rpm -qip foo-server-2.7-1.i386.rpm</userinput>
+<computeroutput>
+Name        : foo-server            Distribution: (none)
+Version     : 2.7                         Vendor: (none)
+Release     : 1                       Build Date: Wed Nov 06 13:33:37 1996
+Install date: (none)                  Build Host: foonly.rpm.org
+Group       : bogus/junque            Source RPM: foo-2.7-1.src.rpm
+Size        : 42
+Summary     : The foo server
+Description :
+This is the long description for the foo server...
+</computeroutput>
+<prompt>#</prompt>
+<prompt># </prompt><userinput>rpm -qip foo-client-2.7-1.i386.rpm</userinput>
+<computeroutput>
+Name        : foo-client            Distribution: (none)
+Version     : 2.7                         Vendor: (none)
+Release     : 1                       Build Date: Wed Nov 06 13:33:37 1996
+Install date: (none)                  Build Host: foonly.rpm.org
+Group       : bogus/junque            Source RPM: foo-2.7-1.src.rpm
+Size        : 42
+Summary     : The foo client
+Description :
+This is the long description for the foo client...
+</computeroutput>
+<prompt>#</prompt>
+<prompt># </prompt><userinput>rpm -qip bazlib-5.6-1.i386.rpm</userinput>
+<computeroutput>
+Name        : bazlib                Distribution: (none)
+Version     : 5.6                         Vendor: (none)
+Release     : 1                       Build Date: Wed Nov 06 13:33:37 1996
+Install date: (none)                  Build Host: foonly.rpm.org
+Group       : bogus/junque            Source RPM: foo-2.7-1.src.rpm
+Size        : 38
+Summary     : The baz library
+Description :
+This is the long description for the bazlib...
+</computeroutput>
+<prompt>#</prompt>
+          </screen>
+        </para>
+
+        <para>
+          Here we've used RPM's query capability to display a list of summary
+          information for each package.  A few points are worth noting.
+        </para>
+
+        <para>
+          First, each package lists <filename>foo-2.7-1.src.rpm</filename> as
+          its source package file.  This is the only way to tell if two package
+          files were created from the same set of sources.  Trying to use a
+          package's name as an indicator is futile, as the
+          <filename>bazlib</filename> package shows us.
+        </para>
+
+        <para>
+          The next thing to notice is that the summaries and descriptions for
+          each package are specific to that package.  Since these tags were
+          placed and named according to each package, that should be no
+          surprise.
+        </para>
+
+        <para>
+          Finally, we can see that each package's version has been either
+          "inherited" from the main package's preamble, or, as in the case of
+          the <filename>bazlib</filename> package, the main package's version
+          has been overridden by a <command>version</command> tag added to
+          <filename>bazlib</filename>'s preamble.
+        </para>
+
+        <para>
+          If we look at the source package's information, we see that its
+          information has been taken entirely from the main package's set of
+          tags:
+
+          <screen width="60">
+<prompt># </prompt><userinput>rpm -qip foo-2.7-1.src.rpm</userinput>
+<computeroutput>
+Name        : foo                   Distribution: (none)
+Version     : 2.7                         Vendor: (none)
+Release     : 1                       Build Date: Wed Nov 06 13:33:37 1996
+Install date: (none)                  Build Host: foonly.rpm.org
+Group       : bogus/junque            Source RPM: (none)
+Size        : 1415
+Summary     : The foo app, and the baz library needed to build it
+Description :
+This is the long description of the foo app, and the baz library needed to
+build it...
+</computeroutput>
+<prompt># </prompt>
+          </screen>
+        </para>
+
+        <para>
+          It's easy to see that if there was no <command>%files</command> list
+          for the main package, and therefore, no main package, the tags in the
+          main preamble would still be used in the source package.  This is why
+          RPM enforces the requirement that the main preamble contain
+          <command>copyright</command>, <command>%description</command>, and
+          <command>group</command> tags.  So, here's a word to the wise: Don't
+          put something stupid in the main preamble's
+          <command>%description</command> just to satisfy RPM.  Your witty
+          saying will be immortalized for all time in every source package you
+          distribute.
+          <footnote>
+            <para>
+              Yes, the author found out about this hard way!
+            </para>
+          </footnote>
+        </para>
+
+        <sect3 id="s3-rpm-subpack-install-erase-scripts-verify">
+          <title>
+            Verifying Subpackage-specific Install and Erase Scripts
+          </title>
+
+          <indexterm>
+            <primary>subpackages</primary>
+            <secondary>scripts, testing</secondary>
+          </indexterm>
+
+          <para>
+            The easiest way to verify that the <command>%pre</command> scripts
+            we defined for each package were actually used is to simply install
+            each package:
+
+            <screen width="60">
+<prompt># </prompt><userinput>rpm -Uvh foo-2.7-1.i386.rpm</userinput>
+<computeroutput>
+foo                    This is the foo package preinstall script
+##################################################
+</computeroutput>
+<prompt>#</prompt>
+<prompt># </prompt><userinput>rpm -Uvh foo-server-2.7-1.i386.rpm</userinput>
+<computeroutput>
+foo-server             This is the foo-server subpackage preinstall script
+##################################################
+</computeroutput>
+<prompt>#</prompt>
+<prompt># </prompt><userinput>rpm -Uvh foo-client-2.7-1.i386.rpm</userinput>
+<computeroutput>
+foo-client             This is the foo-client subpackage preinstall script
+##################################################
+</computeroutput>
+<prompt>#</prompt>
+<prompt># </prompt><userinput>rpm -Uvh bazlib-5.6-1.i386.rpm</userinput>
+<computeroutput>
+bazlib                 This is the bazlib subpackage preinstall script
+##################################################
+</computeroutput>
+<prompt># </prompt>
+            </screen>
+          </para>
+
+          <para>
+            As expected, the unique <command>%pre</command> script for each
+            package has been included.  Of course, if we hadn't wanted to
+            actually install the packages, we could have used RPM's
+            <command>--scripts</command> option to display the scripts:
+
+            <screen width="60">
+<prompt># </prompt><userinput>rpm -qp --scripts foo-2.7-1.i386.rpm</userinput>
+<computeroutput>
+preinstall script:
+echo "This is the foo package preinstall script"
+
+postinstall script:
+(none)
+preuninstall script:
+(none)
+postuninstall script:
+(none)
+verify script:
+(none)
+</computeroutput>
+<prompt>#</prompt>
+            </screen>
+          </para>
+
+          <para>
+            This approach might be a bit safer, particularly if installing the
+            newly built package would disrupt operations on your build system.
+          </para>
+        </sect3>
+      </sect2>
+    </sect1>
+  </chapter>

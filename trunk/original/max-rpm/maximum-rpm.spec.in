@@ -1,0 +1,43 @@
+%{expand: %%define _rel %(date '+%%Y%%m%%d')}
+Summary: The "Maximum RPM" book
+Name: maximum-rpm
+Version: 1.0
+Release: 0.%{_rel}
+License: OPL
+Group: Documentation
+Source: %{name}-%{version}.tar.gz
+BuildArch: noarch
+BuildRoot: %{_tmppath}/%{name}-root
+
+%description
+"Maximum RPM" is a book about the RPM Package Manager or, as it is known
+to its friends, RPM.
+
+The book is divided into two major sections. The first section is for
+anyone who needs to use RPM on his/her system. The second section covers
+all there is to know about build packages using RPM.
+
+%prep
+%setup -q
+
+%build
+./configure
+make
+
+%install
+rm -rf ${RPM_BUILD_ROOT}
+make DESTDIR="$RPM_BUILD_ROOT" install
+
+%clean
+rm -rf ${RPM_BUILD_ROOT}
+
+%files
+%defattr(-,root,root)
+%{_defaultdocdir}/%{name}-%{version}
+
+%changelog
+* Thu Apr 19 2001 Jeff Johnson <jbj@redhat.com>
+- Prepare for Raw Hide distribution.
+
+* Thu Apr  5 2001 Jeff Johnson <jbj@redhat.com>
+- Create.
